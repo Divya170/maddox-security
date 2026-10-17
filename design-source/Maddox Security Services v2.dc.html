@@ -1,0 +1,982 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<title>Maddox Security Services</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Manrope:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<script src="./image-slot.js"></script>
+<style>
+html,body{margin:0;padding:0;background:#F5F4EF;color:#20282D;font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;-webkit-font-smoothing:antialiased}
+*{box-sizing:border-box}
+a{color:#14232E;text-decoration-thickness:1px;text-underline-offset:3px}
+a:hover{color:#7A6338}
+:focus-visible{outline:3px solid #B69A62;outline-offset:3px}
+h1,h2,h3,h4,p{margin:0}
+@media (prefers-reduced-motion: reduce){*{transition:none !important;animation:none !important;scroll-behavior:auto !important}}
+</style>
+</helmet>
+
+<button onClick="{{ skipToMain }}" style="position:absolute;left:16px;top:-80px;z-index:100;background:#F5F4EF;color:#14232E;border:0;border-radius:8px;padding:12px 18px;font:600 14px Inter,sans-serif;cursor:pointer" style-focus="top:12px">Skip to main content</button>
+
+<sc-if value="{{ showDrafts }}" hint-placeholder-val="{{ false }}">
+  <div role="note" style="background:#B69A62;color:#14232E;font:600 13px/1.4 Inter,sans-serif;padding:10px clamp(20px,5vw,64px);text-align:center">Review mode — draft content awaiting owner approval is visible and labelled. It is hidden from the public site.</div>
+</sc-if>
+
+<header style="position:sticky;top:0;z-index:40;background:#14232E;border-bottom:1px solid {{ headerRule }};transition:border-color .25s ease">
+  <div style="max-width:1440px;margin:0 auto;padding:0 clamp(20px,4vw,56px);height:80px;display:flex;align-items:center;justify-content:space-between;gap:24px">
+    <a href="#/" aria-label="Maddox Security Services — home" style="display:flex;align-items:center;gap:12px;text-decoration:none;color:#FFFFFF">
+      <span aria-hidden="true" style="width:34px;height:34px;border:1.5px solid #B69A62;border-radius:8px;display:grid;place-items:center;font:800 15px/1 Manrope,sans-serif;color:#D4BC8A">M</span>
+      <span style="display:flex;flex-direction:column;gap:4px">
+        <span style="font:800 17px/1 Manrope,sans-serif;letter-spacing:.22em">MADDOX</span>
+        <span style="font:500 9px/1 Inter,sans-serif;letter-spacing:.28em;color:#AEB7BC">SECURITY SERVICES</span>
+      </span>
+    </a>
+    <sc-if value="{{ wide }}" hint-placeholder-val="{{ true }}">
+      <nav aria-label="Main" style="display:flex;align-items:center;gap:4px;padding:5px;border:1px solid rgba(245,244,239,.12);border-radius:12px;background:rgba(255,255,255,.03)">
+        <sc-for list="{{ navItems }}" as="item" hint-placeholder-count="6">
+          <a href="{{ item.href }}" aria-current="{{ item.current }}" style="font:500 14px/1 Inter,sans-serif;color:{{ item.fg }};background:{{ item.bg }};text-decoration:none;padding:11px 16px;border-radius:8px;transition:background .2s ease,color .2s ease" style-hover="color:#FFFFFF;background:rgba(255,255,255,.08)">{{ item.label }}</a>
+        </sc-for>
+      </nav>
+    </sc-if>
+    <div style="display:flex;align-items:center;gap:12px">
+      <sc-if value="{{ wide }}" hint-placeholder-val="{{ true }}">
+        <a href="#/contact" style="display:inline-flex;align-items:center;gap:12px;min-height:48px;padding:0 8px 0 20px;background:#F5F4EF;color:#14232E;font:600 14px/1 Inter,sans-serif;text-decoration:none;border-radius:10px;transition:background .2s ease" style-hover="background:#FFFFFF;color:#14232E">Request a Consultation<span aria-hidden="true" style="width:32px;height:32px;border-radius:7px;background:#14232E;color:#FFFFFF;display:grid;place-items:center;font-size:15px">→</span></a>
+      </sc-if>
+      <sc-if value="{{ narrow }}" hint-placeholder-val="{{ false }}">
+        <button ref="{{ menuBtnRef }}" onClick="{{ openMenu }}" aria-expanded="{{ menuExpanded }}" aria-controls="mobile-menu" style="min-height:48px;padding:0 16px;background:rgba(255,255,255,.06);border:1px solid rgba(245,244,239,.25);border-radius:10px;font:600 14px Inter,sans-serif;color:#FFFFFF;cursor:pointer;display:flex;align-items:center;gap:10px">
+          <span aria-hidden="true" style="display:flex;flex-direction:column;gap:4px"><span style="width:18px;height:2px;background:#FFFFFF;display:block"></span><span style="width:12px;height:2px;background:#B69A62;display:block"></span></span>Menu
+        </button>
+      </sc-if>
+    </div>
+  </div>
+</header>
+
+<sc-if value="{{ menuOpen }}" hint-placeholder-val="{{ false }}">
+  <div id="mobile-menu" role="dialog" aria-modal="true" aria-label="Site menu" style="position:fixed;inset:0;z-index:60;background:#14232E;color:#F5F4EF;display:flex;flex-direction:column;padding:0 clamp(20px,5vw,64px) 32px;overflow-y:auto">
+    <div style="height:80px;display:flex;align-items:center;justify-content:space-between">
+      <span style="font:800 17px/1 Manrope,sans-serif;letter-spacing:.22em">MADDOX</span>
+      <button ref="{{ closeBtnRef }}" onClick="{{ closeMenu }}" style="min-height:48px;padding:0 18px;background:transparent;border:1px solid rgba(245,244,239,.4);border-radius:10px;font:600 14px Inter,sans-serif;color:#F5F4EF;cursor:pointer">Close</button>
+    </div>
+    <nav aria-label="Main" style="display:flex;flex-direction:column;margin-top:28px">
+      <sc-for list="{{ navItems }}" as="item" hint-placeholder-count="6">
+        <a href="{{ item.href }}" aria-current="{{ item.current }}" style="display:flex;justify-content:space-between;align-items:center;min-height:68px;font:600 30px/1 Manrope,sans-serif;letter-spacing:-.02em;color:#F5F4EF;text-decoration:none;border-bottom:1px solid rgba(245,244,239,.12)">{{ item.label }}<span aria-hidden="true" style="width:10px;height:10px;border-radius:50%;background:{{ item.dot }}"></span></a>
+      </sc-for>
+    </nav>
+    <a href="#/contact" style="margin-top:36px;display:flex;justify-content:center;align-items:center;min-height:56px;background:#F5F4EF;color:#14232E;font:600 16px Inter,sans-serif;text-decoration:none;border-radius:12px">Request a Consultation</a>
+    <a href="tel:+14047989172" style="margin-top:18px;color:#E3D3B0;font:500 16px Inter,sans-serif;text-align:center">+1 (404) 798-9172</a>
+  </div>
+</sc-if>
+
+<main id="main" tabindex="-1" ref="{{ mainRef }}" style="outline:none">
+
+<!-- ================= HOME ================= -->
+<sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}">
+  <section aria-labelledby="hero-h" data-screen-label="Home" style="background:#14232E;color:#F5F4EF;position:relative;overflow:hidden">
+    <div aria-hidden="true" style="position:absolute;inset:0;pointer-events:none;background-image:linear-gradient(90deg,rgba(245,244,239,.045) 1px,transparent 1px);background-size:calc(100% / 6) 100%"></div>
+    <div style="position:relative;max-width:1440px;margin:0 auto;padding:clamp(40px,6vw,88px) clamp(20px,4vw,56px) clamp(32px,4vw,56px);display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,520px),1fr));gap:clamp(36px,5vw,72px);align-items:stretch">
+      <div style="display:flex;flex-direction:column;justify-content:space-between;gap:40px;padding:clamp(0px,2vw,24px) 0">
+        <div style="display:flex;flex-direction:column;gap:30px">
+          <p style="display:inline-flex;align-self:flex-start;align-items:center;gap:10px;padding:9px 14px;border:1px solid rgba(182,154,98,.45);border-radius:999px;font:600 11.5px/1 Inter,sans-serif;letter-spacing:.16em;color:#D4BC8A"><span aria-hidden="true" style="width:6px;height:6px;border-radius:50%;background:#B69A62"></span>MADDOX SECURITY SERVICES</p>
+          <h1 id="hero-h" style="font:600 clamp(48px,7vw,108px)/.95 Manrope,sans-serif;letter-spacing:-.045em;color:#FFFFFF;text-wrap:balance">Professional Security. <span style="color:#C9AE77;font-weight:300">Confidence</span> for Your Business.</h1>
+          <p style="font:400 clamp(17px,1.4vw,20px)/1.6 Inter,sans-serif;color:#C9CFD2;max-width:30em;text-wrap:pretty">Explore security services designed around your organization's needs, property, and operating environment.</p>
+          <div style="display:flex;flex-wrap:wrap;gap:12px">
+            <a href="#/contact" style="display:inline-flex;align-items:center;gap:14px;min-height:56px;padding:0 10px 0 24px;background:#F5F4EF;color:#14232E;font:600 16px/1 Inter,sans-serif;text-decoration:none;border-radius:12px;transition:transform .2s ease,background .2s ease" style-hover="background:#FFFFFF;color:#14232E;transform:translateY(-2px)">Request a Consultation<span aria-hidden="true" style="width:38px;height:38px;border-radius:9px;background:#14232E;color:#FFFFFF;display:grid;place-items:center">→</span></a>
+            <a href="#/services" style="display:inline-flex;align-items:center;min-height:56px;padding:0 24px;border:1px solid rgba(245,244,239,.3);color:#FFFFFF;font:600 16px/1 Inter,sans-serif;text-decoration:none;border-radius:12px;transition:border-color .2s ease,background .2s ease" style-hover="border-color:#F5F4EF;background:rgba(255,255,255,.05);color:#FFFFFF">Explore Our Services</a>
+          </div>
+        </div>
+        <ul style="list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,170px),1fr));gap:0;border-top:1px solid rgba(245,244,239,.14)">
+          <sc-for list="{{ strip }}" as="item" hint-placeholder-count="3">
+            <li style="padding:20px 18px 4px 0;font:500 14px/1.4 Inter,sans-serif;color:#E4E7E8;display:flex;gap:10px;align-items:flex-start"><span aria-hidden="true" style="width:7px;height:7px;margin-top:6px;background:#B69A62;transform:rotate(45deg);flex:0 0 auto"></span>{{ item }}</li>
+          </sc-for>
+        </ul>
+      </div>
+      <div style="position:relative;min-height:clamp(420px,62vh,720px)">
+        <div style="position:absolute;inset:0;border-radius:20px;overflow:hidden;background:#22323D">
+          <image-slot id="hero-photo" shape="rect" placeholder="Hero photo — uniformed security professional at a contemporary office entrance, natural light" style="width:100%;height:100%"></image-slot>
+        </div>
+        <div style="position:absolute;right:16px;bottom:16px;max-width:300px;background:#FFFFFF;color:#20282D;border-radius:14px;padding:18px 20px;display:flex;flex-direction:column;gap:10px;box-shadow:0 24px 48px -16px rgba(0,0,0,.35)">
+          <p style="font:600 11px/1 Inter,sans-serif;letter-spacing:.14em;color:#7A6338">PREFER TO TALK?</p>
+          <a href="tel:+14047989172" style="font:700 20px/1.2 Manrope,sans-serif;color:#14232E;text-decoration:none" style-hover="color:#7A6338">+1 (404) 798-9172</a>
+          <p style="font:400 13px/1.45 Inter,sans-serif;color:#5A666E">Call to discuss your organization's requirements.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="stmt-h" data-reveal="1" style="max-width:1440px;margin:0 auto;padding:clamp(80px,10vw,152px) clamp(20px,4vw,56px) clamp(56px,6vw,96px);display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:32px 64px;align-items:end">
+    <h2 id="stmt-h" style="grid-column:1 / -1;font:500 clamp(34px,5vw,72px)/1.06 Manrope,sans-serif;letter-spacing:-.035em;color:#14232E;max-width:18em;text-wrap:balance">Security that supports business confidence<span style="color:#9AA4AA"> — shaped around your site, your people, and the way you operate.</span></h2>
+  </section>
+
+  <section aria-labelledby="svc-h" style="max-width:1440px;margin:0 auto;padding:0 clamp(20px,4vw,56px) clamp(80px,9vw,140px)">
+    <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:end;gap:20px 48px;margin-bottom:32px">
+      <div style="display:flex;align-items:center;gap:14px">
+        <span style="font:600 12px/1 Inter,sans-serif;letter-spacing:.16em;color:#7A6338">SERVICES</span>
+        <span aria-hidden="true" style="width:56px;height:1px;background:#B69A62"></span>
+        <h2 id="svc-h" style="font:600 15px/1 Inter,sans-serif;color:#20282D">What we can help with</h2>
+      </div>
+      <a href="#/services" style="font:600 15px/1 Inter,sans-serif;color:#14232E;display:inline-flex;align-items:center;gap:10px;min-height:44px">View all services <span aria-hidden="true">→</span></a>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));grid-auto-rows:minmax(260px,auto);gap:16px">
+      <a href="#/services/guard" data-reveal="1" style="grid-row:span 2;position:relative;display:flex;flex-direction:column;justify-content:flex-end;min-height:540px;border-radius:20px;overflow:hidden;background:#14232E;color:#FFFFFF;text-decoration:none;transition:transform .3s ease" style-hover="transform:translateY(-4px);color:#FFFFFF">
+        <div style="position:absolute;inset:0"><image-slot id="home-svc-guard" shape="rect" placeholder="Guard services — officer at building entrance, portrait crop" style="width:100%;height:100%"></image-slot></div>
+        <div aria-hidden="true" style="position:absolute;inset:40% 0 0 0;background:linear-gradient(180deg,rgba(20,35,46,0) 0%,rgba(20,35,46,.92) 70%);pointer-events:none"></div>
+        <div style="position:relative;padding:28px;display:flex;flex-direction:column;gap:12px;pointer-events:none">
+          <span style="font:500 13px/1 Inter,sans-serif;color:#D4BC8A;letter-spacing:.08em">01</span>
+          <span style="font:600 clamp(28px,2.6vw,38px)/1.05 Manrope,sans-serif;letter-spacing:-.025em">Guard Services</span>
+          <span style="font:400 15px/1.55 Inter,sans-serif;color:#D5DADC;max-width:28em">{{ firstSummary }}</span>
+        </div>
+      </a>
+      <sc-for list="{{ otherServices }}" as="item" hint-placeholder-count="3">
+        <a href="{{ item.detailHref }}" data-reveal="1" style="display:flex;flex-direction:column;justify-content:space-between;gap:28px;padding:28px;border-radius:20px;background:#FFFFFF;border:1px solid #E4E6E3;color:#20282D;text-decoration:none;transition:transform .3s ease,box-shadow .3s ease,border-color .3s ease" style-hover="transform:translateY(-4px);box-shadow:0 24px 48px -24px rgba(20,35,46,.28);border-color:#B69A62;color:#20282D">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:16px">
+            <span style="font:500 13px/1 Inter,sans-serif;color:#7A6338;letter-spacing:.08em">{{ item.n }}</span>
+            <span aria-hidden="true" style="width:40px;height:40px;border-radius:10px;border:1px solid #D9DEDF;display:grid;place-items:center;color:#14232E;font-size:16px">↗</span>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:12px">
+            <span style="font:600 clamp(24px,2vw,30px)/1.1 Manrope,sans-serif;letter-spacing:-.02em;color:#14232E">{{ item.title }}</span>
+            <sc-if value="{{ item.draft }}" hint-placeholder-val="{{ false }}"><span style="align-self:flex-start;font:600 10.5px/1 Inter,sans-serif;letter-spacing:.08em;padding:6px 8px;border:1px solid #7A6338;border-radius:6px;color:#7A6338">DRAFT · PENDING CONFIRMATION</span></sc-if>
+            <span style="font:400 15px/1.55 Inter,sans-serif;color:#4A555C">{{ item.summary }}</span>
+          </div>
+        </a>
+      </sc-for>
+      <a href="#/contact" data-reveal="1" style="display:flex;flex-direction:column;justify-content:space-between;gap:28px;padding:28px;border-radius:20px;background:#B69A62;color:#14232E;text-decoration:none;transition:transform .3s ease" style-hover="transform:translateY(-4px);color:#14232E">
+        <span style="font:600 12px/1 Inter,sans-serif;letter-spacing:.14em">NOT SURE YET?</span>
+        <span style="display:flex;justify-content:space-between;align-items:flex-end;gap:16px">
+          <span style="font:600 clamp(24px,2vw,30px)/1.1 Manrope,sans-serif;letter-spacing:-.02em">Discuss Your Security Requirements</span>
+          <span aria-hidden="true" style="flex:0 0 auto;width:44px;height:44px;border-radius:10px;background:#14232E;color:#FFFFFF;display:grid;place-items:center">→</span>
+        </span>
+      </a>
+    </div>
+  </section>
+
+  <section aria-labelledby="proc-h" style="background:#FFFFFF;border-top:1px solid #E4E6E3;border-bottom:1px solid #E4E6E3">
+    <div style="max-width:1440px;margin:0 auto;padding:clamp(80px,9vw,140px) clamp(20px,4vw,56px);display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,380px),1fr));gap:48px clamp(40px,6vw,96px)">
+      <div style="display:flex;flex-direction:column;gap:24px;align-self:start;position:sticky;top:112px">
+        <p style="display:flex;align-items:center;gap:14px;font:600 12px/1 Inter,sans-serif;letter-spacing:.16em;color:#7A6338">HOW AN ENQUIRY WORKS<span aria-hidden="true" style="width:56px;height:1px;background:#B69A62"></span></p>
+        <h2 id="proc-h" style="font:600 clamp(34px,4vw,56px)/1.02 Manrope,sans-serif;letter-spacing:-.035em;color:#14232E;text-wrap:balance">A clear first conversation.</h2>
+        <p style="font:400 16px/1.6 Inter,sans-serif;color:#4A555C;max-width:28em">An outline of how most enquiries begin. Every organization is different, and next steps are agreed with you directly.</p>
+        <div><a href="#/contact" style="display:inline-flex;align-items:center;gap:14px;min-height:52px;padding:0 8px 0 22px;background:#14232E;color:#FFFFFF;font:600 15px/1 Inter,sans-serif;text-decoration:none;border-radius:12px;transition:background .2s ease" style-hover="background:#20282D;color:#FFFFFF">Start a Service Assessment<span aria-hidden="true" style="width:36px;height:36px;border-radius:9px;background:#B69A62;color:#14232E;display:grid;place-items:center">→</span></a></div>
+      </div>
+      <ol style="list-style:none;margin:0;padding:0;display:flex;flex-direction:column">
+        <sc-for list="{{ steps }}" as="item" hint-placeholder-count="3">
+          <li data-reveal="1" style="display:flex;gap:clamp(20px,3vw,40px);padding:32px 0;border-top:1px solid #D9DEDF;align-items:flex-start">
+            <span style="flex:0 0 auto;font:300 clamp(56px,6vw,96px)/.85 Manrope,sans-serif;color:#B69A62;letter-spacing:-.05em">{{ item.n }}</span>
+            <div style="display:flex;flex-direction:column;gap:12px;padding-top:6px">
+              <h3 style="font:600 clamp(22px,2vw,28px)/1.15 Manrope,sans-serif;letter-spacing:-.02em;color:#14232E">{{ item.title }}</h3>
+              <p style="font:400 16px/1.6 Inter,sans-serif;color:#4A555C;max-width:32em">{{ item.body }}</p>
+            </div>
+          </li>
+        </sc-for>
+      </ol>
+    </div>
+  </section>
+
+  <section aria-label="Company image" style="max-width:1440px;margin:0 auto;padding:clamp(16px,2vw,24px) clamp(20px,4vw,56px) 0">
+    <div data-reveal="1" style="position:relative;aspect-ratio:21/9;min-height:360px;border-radius:24px;overflow:hidden;background:#E7E5DE">
+      <image-slot id="home-band" shape="rect" placeholder="Wide architectural photo — commercial lobby with security professional greeting a visitor" style="width:100%;height:100%"></image-slot>
+    </div>
+  </section>
+
+  <section aria-labelledby="co-h" style="max-width:1440px;margin:0 auto;padding:clamp(56px,7vw,104px) clamp(20px,4vw,56px) clamp(80px,9vw,128px);display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,380px),1fr));gap:32px clamp(40px,6vw,96px);align-items:start">
+    <div style="display:flex;flex-direction:column;gap:20px">
+      <p style="display:flex;align-items:center;gap:14px;font:600 12px/1 Inter,sans-serif;letter-spacing:.16em;color:#7A6338">THE COMPANY<span aria-hidden="true" style="width:56px;height:1px;background:#B69A62"></span></p>
+      <h2 id="co-h" style="font:600 clamp(32px,3.8vw,52px)/1.04 Manrope,sans-serif;letter-spacing:-.035em;color:#14232E;text-wrap:balance">Professional Service Starts With Clear Expectations.</h2>
+    </div>
+    <div data-reveal="1" style="display:flex;flex-direction:column;gap:24px;max-width:36em;padding-top:8px">
+      <p style="font:400 18px/1.65 Inter,sans-serif;color:#3A454C;text-wrap:pretty">Maddox Security Services works with organizations that need a professional security presence. Engagements begin with a consultation, so the service is shaped around your premises and the way you operate.</p>
+      <div><a href="#/company" style="font:600 15px/1 Inter,sans-serif;color:#14232E;display:inline-flex;gap:10px;min-height:44px;align-items:center">Learn About Maddox Security Services <span aria-hidden="true">→</span></a></div>
+    </div>
+  </section>
+
+  <sc-if value="{{ showDrafts }}" hint-placeholder-val="{{ false }}">
+    <section aria-labelledby="ind-prev-h" style="max-width:1440px;margin:0 auto;padding:0 clamp(20px,4vw,56px) clamp(80px,9vw,128px);display:flex;flex-direction:column;gap:28px">
+      <div style="display:flex;flex-wrap:wrap;gap:16px;align-items:center;justify-content:space-between">
+        <h2 id="ind-prev-h" style="font:600 clamp(28px,3.2vw,42px)/1.1 Manrope,sans-serif;letter-spacing:-.03em;color:#14232E">Environments we can discuss</h2>
+        <span style="font:600 10.5px/1 Inter,sans-serif;letter-spacing:.08em;padding:7px 9px;border:1px solid #7A6338;border-radius:6px;color:#7A6338">DRAFT · HIDDEN UNTIL SECTORS ARE CONFIRMED</span>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:16px">
+        <sc-for list="{{ industries }}" as="item" hint-placeholder-count="5">
+          <a href="#/industries" style="display:flex;flex-direction:column;gap:14px;text-decoration:none;color:#14232E">
+            <div style="aspect-ratio:{{ item.ratio }};border-radius:16px;overflow:hidden;background:#E7E5DE"><image-slot id="{{ item.slotPrev }}" shape="rect" placeholder="{{ item.photo }}" style="width:100%;height:100%"></image-slot></div>
+            <span style="font:600 17px/1.3 Manrope,sans-serif">{{ item.name }}</span>
+          </a>
+        </sc-for>
+      </div>
+    </section>
+  </sc-if>
+
+  <section aria-labelledby="car-prev-h" style="max-width:1440px;margin:0 auto;padding:0 clamp(20px,4vw,56px)">
+    <div data-reveal="1" style="border-radius:20px;border:1px solid #D9DEDF;background:#FFFFFF;padding:clamp(28px,4vw,48px);display:flex;flex-wrap:wrap;gap:24px 48px;align-items:center;justify-content:space-between">
+      <div style="display:flex;flex-direction:column;gap:10px;max-width:44em">
+        <p style="font:600 12px/1 Inter,sans-serif;letter-spacing:.16em;color:#7A6338">CAREERS</p>
+        <h2 id="car-prev-h" style="font:600 clamp(24px,2.6vw,34px)/1.15 Manrope,sans-serif;letter-spacing:-.025em;color:#14232E">Interested in working with us?</h2>
+        <p style="font:400 16px/1.6 Inter,sans-serif;color:#4A555C">{{ careersTeaser }}</p>
+      </div>
+      <a href="#/careers" style="display:inline-flex;align-items:center;gap:12px;min-height:52px;padding:0 22px;border:1px solid #14232E;color:#14232E;font:600 15px/1 Inter,sans-serif;text-decoration:none;border-radius:12px;transition:background .2s ease" style-hover="background:#14232E;color:#FFFFFF">Explore Careers <span aria-hidden="true">→</span></a>
+    </div>
+  </section>
+</sc-if>
+
+<!-- ================= INNER PAGE HERO ================= -->
+<sc-if value="{{ hasPageHero }}" hint-placeholder-val="{{ false }}">
+  <section aria-labelledby="ph-h" data-screen-label="{{ pageLabel }}" style="background:#14232E;color:#F5F4EF;position:relative;overflow:hidden">
+    <div aria-hidden="true" style="position:absolute;inset:0;pointer-events:none;background-image:linear-gradient(90deg,rgba(245,244,239,.045) 1px,transparent 1px);background-size:calc(100% / 6) 100%"></div>
+    <div style="position:relative;max-width:1440px;margin:0 auto;padding:clamp(48px,7vw,112px) clamp(20px,4vw,56px) clamp(48px,6vw,88px);display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,460px),1fr));gap:28px 72px;align-items:end">
+      <div style="display:flex;flex-direction:column;gap:26px">
+        <p style="display:inline-flex;align-self:flex-start;align-items:center;gap:10px;padding:9px 14px;border:1px solid rgba(182,154,98,.45);border-radius:999px;font:600 11.5px/1 Inter,sans-serif;letter-spacing:.16em;color:#D4BC8A"><span aria-hidden="true" style="width:6px;height:6px;border-radius:50%;background:#B69A62"></span>{{ pageEyebrow }}</p>
+        <h1 id="ph-h" style="font:600 clamp(42px,5.8vw,88px)/.98 Manrope,sans-serif;letter-spacing:-.045em;color:#FFFFFF;text-wrap:balance">{{ pageTitle }}</h1>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:24px;max-width:34em">
+        <p style="font:400 clamp(17px,1.3vw,19px)/1.6 Inter,sans-serif;color:#C9CFD2;text-wrap:pretty">{{ pageIntro }}</p>
+        <sc-if value="{{ pageHeroCta }}" hint-placeholder-val="{{ false }}">
+          <div><a href="#/contact" style="display:inline-flex;align-items:center;gap:14px;min-height:54px;padding:0 10px 0 22px;background:#F5F4EF;color:#14232E;font:600 15px/1 Inter,sans-serif;text-decoration:none;border-radius:12px" style-hover="background:#FFFFFF;color:#14232E">Discuss Your Requirements<span aria-hidden="true" style="width:36px;height:36px;border-radius:9px;background:#14232E;color:#FFFFFF;display:grid;place-items:center">→</span></a></div>
+        </sc-if>
+      </div>
+    </div>
+  </section>
+</sc-if>
+
+<!-- ================= SERVICES ================= -->
+<sc-if value="{{ isServices }}" hint-placeholder-val="{{ false }}">
+  <section aria-label="Featured service" style="max-width:1440px;margin:0 auto;padding:clamp(40px,5vw,72px) clamp(20px,4vw,56px) 0">
+    <div data-reveal="1" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));border-radius:24px;overflow:hidden;background:#FFFFFF;border:1px solid #E4E6E3">
+      <div style="min-height:380px;background:#E7E5DE"><image-slot id="svc-feature" shape="rect" placeholder="Security officer at a building access point, daytime, neutral grade" style="width:100%;height:100%"></image-slot></div>
+      <div style="padding:clamp(28px,4vw,56px);display:flex;flex-direction:column;gap:18px;justify-content:center">
+        <p style="font:600 12px/1 Inter,sans-serif;letter-spacing:.16em;color:#7A6338">01 — GUARD SERVICES</p>
+        <h2 style="font:600 clamp(28px,3vw,44px)/1.05 Manrope,sans-serif;letter-spacing:-.035em;color:#14232E">A professional presence at your premises.</h2>
+        <p style="font:400 16px/1.65 Inter,sans-serif;color:#4A555C;max-width:30em">{{ firstSummary }}</p>
+        <div style="margin-top:6px"><a href="#/contact?service=guard" style="display:inline-flex;align-items:center;gap:14px;min-height:52px;padding:0 8px 0 22px;background:#14232E;color:#FFFFFF;font:600 15px/1 Inter,sans-serif;text-decoration:none;border-radius:12px" style-hover="background:#20282D;color:#FFFFFF">Discuss Guard Services<span aria-hidden="true" style="width:36px;height:36px;border-radius:9px;background:#B69A62;color:#14232E;display:grid;place-items:center">→</span></a></div>
+      </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="cat-h" style="max-width:1440px;margin:0 auto;padding:clamp(64px,8vw,112px) clamp(20px,4vw,56px) 0">
+    <div style="display:flex;align-items:center;gap:14px;margin-bottom:24px">
+      <h2 id="cat-h" style="font:600 12px/1 Inter,sans-serif;letter-spacing:.16em;color:#7A6338">ALL SERVICES</h2><span aria-hidden="true" style="width:56px;height:1px;background:#B69A62"></span>
+    </div>
+    <ul style="list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:12px">
+      <sc-for list="{{ services }}" as="item" hint-placeholder-count="4">
+        <li id="{{ item.anchor }}" data-reveal="1" style="border-radius:18px;background:#FFFFFF;border:1px solid {{ item.cardBorder }};transition:border-color .25s ease">
+          <div style="display:flex;flex-wrap:wrap;gap:16px 32px;align-items:center;padding:clamp(22px,2.6vw,32px)">
+            <span style="flex:0 0 40px;font:500 13px/1 Inter,sans-serif;color:#7A6338;letter-spacing:.08em">{{ item.n }}</span>
+            <h3 style="flex:1 1 240px;font:600 clamp(24px,2.2vw,32px)/1.1 Manrope,sans-serif;letter-spacing:-.025em;color:#14232E">{{ item.title }}<sc-if value="{{ item.draft }}" hint-placeholder-val="{{ false }}"><span style="margin-left:12px;vertical-align:middle;display:inline-block;font:600 10.5px/1 Inter,sans-serif;letter-spacing:.08em;padding:6px 8px;border:1px solid #7A6338;border-radius:6px;color:#7A6338">DRAFT</span></sc-if></h3>
+            <p style="flex:1 1 300px;font:400 16px/1.6 Inter,sans-serif;color:#4A555C;max-width:520px">{{ item.summary }}</p>
+            <button onClick="{{ item.toggle }}" aria-expanded="{{ item.expanded }}" aria-controls="{{ item.panelId }}" style="flex:0 0 auto;min-height:46px;padding:0 8px 0 18px;background:{{ item.btnBg }};border:1px solid #14232E;border-radius:12px;font:600 14px Inter,sans-serif;color:{{ item.btnFg }};cursor:pointer;display:flex;align-items:center;gap:12px;transition:background .2s ease">{{ item.btnLabel }}<span aria-hidden="true" style="width:30px;height:30px;border-radius:8px;border:1px solid currentColor;display:grid;place-items:center">{{ item.sign }}</span></button>
+          </div>
+          <sc-if value="{{ item.open }}" hint-placeholder-val="{{ false }}">
+            <div id="{{ item.panelId }}" style="margin:0 clamp(12px,2vw,20px) clamp(12px,2vw,20px);padding:clamp(22px,3vw,36px);border-radius:14px;background:#F5F4EF;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:28px 40px">
+              <div style="display:flex;flex-direction:column;gap:12px">
+                <h4 style="font:600 12px/1 Inter,sans-serif;letter-spacing:.14em;color:#7A6338">OVERVIEW</h4>
+                <p style="font:400 16px/1.65 Inter,sans-serif;color:#20282D">{{ item.overview }}</p>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:12px">
+                <h4 style="font:600 12px/1 Inter,sans-serif;letter-spacing:.14em;color:#7A6338">HELPFUL TO SHARE IN YOUR ENQUIRY</h4>
+                <ul style="margin:0;padding:0 0 0 18px;font:400 16px/1.7 Inter,sans-serif;color:#20282D">
+                  <li>The type of site, property, or event</li>
+                  <li>The general city or service area</li>
+                  <li>The kind of support you're considering</li>
+                </ul>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:16px;align-items:flex-start">
+                <p style="font:400 15px/1.6 Inter,sans-serif;color:#5A666E">Inclusions and arrangements are confirmed with you during consultation.</p>
+                <a href="{{ item.enquireHref }}" style="display:inline-flex;align-items:center;gap:12px;min-height:50px;padding:0 8px 0 20px;background:#14232E;color:#FFFFFF;font:600 15px/1 Inter,sans-serif;text-decoration:none;border-radius:12px" style-hover="background:#20282D;color:#FFFFFF">{{ item.enquireLabel }}<span aria-hidden="true" style="width:34px;height:34px;border-radius:8px;background:#B69A62;color:#14232E;display:grid;place-items:center">→</span></a>
+              </div>
+            </div>
+          </sc-if>
+        </li>
+      </sc-for>
+    </ul>
+  </section>
+</sc-if>
+
+<!-- ================= INDUSTRIES ================= -->
+<sc-if value="{{ isIndustries }}" hint-placeholder-val="{{ false }}">
+  <sc-if value="{{ hideDrafts }}" hint-placeholder-val="{{ true }}">
+    <section aria-labelledby="ind-svc-h" style="max-width:1440px;margin:0 auto;padding:clamp(64px,8vw,112px) clamp(20px,4vw,56px) 0;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,380px),1fr));gap:32px clamp(40px,6vw,96px)">
+      <div style="display:flex;flex-direction:column;gap:20px">
+        <h2 id="ind-svc-h" style="font:600 clamp(30px,3.4vw,46px)/1.05 Manrope,sans-serif;letter-spacing:-.035em;color:#14232E;text-wrap:balance">Start with the service, then tell us about the site.</h2>
+        <p style="font:400 16px/1.6 Inter,sans-serif;color:#4A555C;max-width:30em">Choose a service to learn more, or include your site type in the enquiry form.</p>
+      </div>
+      <ul style="list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px">
+        <sc-for list="{{ services }}" as="item" hint-placeholder-count="4">
+          <li><a href="{{ item.detailHref }}" style="display:flex;justify-content:space-between;align-items:center;gap:16px;min-height:72px;padding:0 12px 0 24px;border-radius:14px;background:#FFFFFF;border:1px solid #E4E6E3;font:600 20px/1.2 Manrope,sans-serif;letter-spacing:-.015em;color:#14232E;text-decoration:none;transition:border-color .2s ease,transform .2s ease" style-hover="border-color:#B69A62;transform:translateX(4px);color:#14232E">{{ item.title }}<span aria-hidden="true" style="width:40px;height:40px;border-radius:10px;background:#F5F4EF;display:grid;place-items:center;font:400 16px Inter,sans-serif">→</span></a></li>
+        </sc-for>
+      </ul>
+    </section>
+  </sc-if>
+
+  <sc-if value="{{ showDrafts }}" hint-placeholder-val="{{ false }}">
+    <section aria-labelledby="ind-cat-h" style="max-width:1440px;margin:0 auto;padding:clamp(64px,8vw,112px) clamp(20px,4vw,56px) 0;display:flex;flex-direction:column;gap:20px">
+      <div style="display:flex;flex-wrap:wrap;gap:16px;align-items:center;justify-content:space-between;margin-bottom:12px">
+        <h2 id="ind-cat-h" style="font:600 clamp(28px,3.2vw,42px)/1.1 Manrope,sans-serif;letter-spacing:-.03em;color:#14232E">Candidate sectors</h2>
+        <span style="font:600 10.5px/1 Inter,sans-serif;letter-spacing:.08em;padding:7px 9px;border:1px solid #7A6338;border-radius:6px;color:#7A6338">DRAFT · OWNER TO CONFIRM BEFORE PUBLICATION</span>
+      </div>
+      <sc-for list="{{ industries }}" as="item" hint-placeholder-count="5">
+        <article data-reveal="1" style="display:flex;flex-wrap:wrap;flex-direction:{{ item.dir }};gap:0;border-radius:20px;overflow:hidden;background:#FFFFFF;border:1px solid #E4E6E3">
+          <div style="flex:1 1 380px;min-height:300px;background:#E7E5DE"><image-slot id="{{ item.slot }}" shape="rect" placeholder="{{ item.photo }}" style="width:100%;height:100%"></image-slot></div>
+          <div style="flex:1 1 340px;display:flex;flex-direction:column;gap:16px;justify-content:center;padding:clamp(24px,4vw,48px)">
+            <h3 style="font:600 clamp(24px,2.4vw,34px)/1.1 Manrope,sans-serif;letter-spacing:-.025em;color:#14232E">{{ item.name }}</h3>
+            <p style="font:400 16px/1.65 Inter,sans-serif;color:#4A555C;max-width:32em">{{ item.body }}</p>
+            <p style="font:500 14px/1.5 Inter,sans-serif;color:#5A666E">Related services: {{ item.related }}</p>
+            <div><a href="#/contact" style="font:600 15px/1 Inter,sans-serif;color:#14232E;display:inline-flex;gap:10px;min-height:44px;align-items:center">Discuss a site assessment <span aria-hidden="true">→</span></a></div>
+          </div>
+        </article>
+      </sc-for>
+    </section>
+  </sc-if>
+</sc-if>
+
+<!-- ================= COMPANY ================= -->
+<sc-if value="{{ isCompany }}" hint-placeholder-val="{{ false }}">
+  <section aria-label="Company image" style="max-width:1440px;margin:0 auto;padding:clamp(40px,5vw,72px) clamp(20px,4vw,56px) 0">
+    <div data-reveal="1" style="aspect-ratio:21/9;min-height:280px;border-radius:24px;overflow:hidden;background:#E7E5DE"><image-slot id="company-wide" shape="rect" placeholder="Architectural exterior — well-maintained commercial building entrance, wide crop" style="width:100%;height:100%"></image-slot></div>
+  </section>
+
+  <section aria-labelledby="appr-h" style="max-width:1440px;margin:0 auto;padding:clamp(56px,7vw,104px) clamp(20px,4vw,56px);display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,380px),1fr));gap:32px clamp(40px,6vw,96px)">
+    <h2 id="appr-h" style="font:600 clamp(30px,3.6vw,50px)/1.04 Manrope,sans-serif;letter-spacing:-.035em;color:#14232E;text-wrap:balance">Professional protection. <span style="color:#9AA4AA">Operational confidence.</span> Responsible security.</h2>
+    <div data-reveal="1" style="display:flex;flex-direction:column;gap:20px;max-width:36em">
+      <p style="font:400 18px/1.65 Inter,sans-serif;color:#20282D">Maddox Security Services provides professional security services to organizations, including commercial premises and events.</p>
+      <p style="font:400 17px/1.65 Inter,sans-serif;color:#4A555C">We begin every engagement with a consultation. That conversation is where we understand your site, your organization, and what you need from a security provider — before anything is agreed.</p>
+      <sc-if value="{{ showDrafts }}" hint-placeholder-val="{{ false }}">
+        <div style="border:1px dashed #7A6338;border-radius:14px;padding:20px;display:flex;flex-direction:column;gap:8px;background:#FFFFFF">
+          <p style="font:600 10.5px/1 Inter,sans-serif;letter-spacing:.08em;color:#7A6338">DRAFT · AWAITING APPROVED COMPANY PROFILE</p>
+          <p style="font:400 15px/1.6 Inter,sans-serif;color:#4A555C">Reserved for owner-approved content: company background, approach, and service standards. Not shown publicly until approved.</p>
+        </div>
+      </sc-if>
+    </div>
+  </section>
+
+  <sc-if value="{{ showDrafts }}" hint-placeholder-val="{{ false }}">
+    <section aria-labelledby="credd-h" style="max-width:1440px;margin:0 auto;padding:0 clamp(20px,4vw,56px) clamp(56px,7vw,96px);display:flex;flex-direction:column;gap:20px">
+      <div style="display:flex;flex-wrap:wrap;gap:16px;align-items:center;justify-content:space-between">
+        <h2 id="credd-h" style="font:600 clamp(26px,2.8vw,36px)/1.1 Manrope,sans-serif;letter-spacing:-.03em;color:#14232E">Credentials &amp; compliance</h2>
+        <span style="font:600 10.5px/1 Inter,sans-serif;letter-spacing:.08em;padding:7px 9px;border:1px solid #7A6338;border-radius:6px;color:#7A6338">DRAFT · EACH ROW PUBLISHES ONLY AFTER VERIFICATION</span>
+      </div>
+      <ul style="list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr));gap:12px">
+        <sc-for list="{{ credentials }}" as="item" hint-placeholder-count="4">
+          <li style="display:flex;flex-direction:column;gap:10px;padding:22px;border-radius:16px;background:#FFFFFF;border:1px dashed #C9B48A">
+            <span style="font:600 18px/1.3 Manrope,sans-serif;color:#14232E">{{ item.label }}</span>
+            <span style="font:500 14px/1.4 Inter,sans-serif;color:#7A6338">Awaiting verified details — hidden from public</span>
+          </li>
+        </sc-for>
+      </ul>
+    </section>
+  </sc-if>
+
+  <section aria-labelledby="cred-h" style="max-width:1440px;margin:0 auto;padding:0 clamp(20px,4vw,56px)">
+    <div data-reveal="1" style="border-radius:24px;background:#FFFFFF;border:1px solid #E4E6E3;padding:clamp(28px,4vw,56px);display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:32px 72px">
+      <div style="display:flex;flex-direction:column;gap:16px">
+        <p style="font:600 12px/1 Inter,sans-serif;letter-spacing:.16em;color:#7A6338">CONTACT DETAILS</p>
+        <h2 id="cred-h" style="font:600 clamp(26px,2.8vw,38px)/1.08 Manrope,sans-serif;letter-spacing:-.03em;color:#14232E">Speak with us directly.</h2>
+        <div style="margin-top:8px"><a href="#/contact" style="display:inline-flex;align-items:center;gap:14px;min-height:52px;padding:0 8px 0 22px;background:#14232E;color:#FFFFFF;font:600 15px/1 Inter,sans-serif;text-decoration:none;border-radius:12px" style-hover="background:#20282D;color:#FFFFFF">Request a Consultation<span aria-hidden="true" style="width:36px;height:36px;border-radius:9px;background:#B69A62;color:#14232E;display:grid;place-items:center">→</span></a></div>
+      </div>
+      <dl style="margin:0;display:grid;grid-template-columns:minmax(90px,auto) minmax(0,1fr)">
+        <dt style="padding:18px 16px 18px 0;border-bottom:1px solid #E4E6E3;font:600 12px/1.6 Inter,sans-serif;letter-spacing:.1em;color:#5A666E">ADDRESS</dt>
+        <dd style="margin:0;padding:18px 0;border-bottom:1px solid #E4E6E3;font:500 16px/1.5 Inter,sans-serif;color:#20282D">1000 Washington St, Boston, MA 21180</dd>
+        <dt style="padding:18px 16px 18px 0;border-bottom:1px solid #E4E6E3;font:600 12px/1.6 Inter,sans-serif;letter-spacing:.1em;color:#5A666E">EMAIL</dt>
+        <dd style="margin:0;padding:18px 0;border-bottom:1px solid #E4E6E3;font:500 16px/1.5 Inter,sans-serif;overflow-wrap:anywhere"><a href="mailto:chase.maddox@outlook.com">chase.maddox@outlook.com</a></dd>
+        <dt style="padding:18px 16px 18px 0;font:600 12px/1.6 Inter,sans-serif;letter-spacing:.1em;color:#5A666E">PHONE</dt>
+        <dd style="margin:0;padding:18px 0;font:500 16px/1.5 Inter,sans-serif"><a href="tel:+14047989172">+1 (404) 798-9172</a></dd>
+      </dl>
+    </div>
+  </section>
+</sc-if>
+
+<!-- ================= CAREERS ================= -->
+<sc-if value="{{ isCareersList }}" hint-placeholder-val="{{ false }}">
+  <section aria-labelledby="vac-h" style="max-width:1440px;margin:0 auto;padding:clamp(40px,5vw,72px) clamp(20px,4vw,56px) 0;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));gap:16px">
+    <div data-reveal="1" style="min-height:420px;border-radius:24px;overflow:hidden;background:#E7E5DE"><image-slot id="careers-photo" shape="rect" placeholder="Security professional at work in a commercial reception — approachable, natural light" style="width:100%;height:100%"></image-slot></div>
+    <div style="border-radius:24px;background:#FFFFFF;border:1px solid #E4E6E3;padding:clamp(28px,4vw,48px);display:flex;flex-direction:column;gap:24px">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:16px">
+        <h2 id="vac-h" style="font:600 clamp(26px,2.8vw,36px)/1.1 Manrope,sans-serif;letter-spacing:-.03em;color:#14232E">Current vacancies</h2>
+        <span style="font:600 13px/1 Inter,sans-serif;padding:8px 12px;border-radius:999px;background:#F5F4EF;color:#20282D">{{ vacancyCount }}</span>
+      </div>
+      <sc-if value="{{ noVacancies }}" hint-placeholder-val="{{ true }}">
+        <div style="flex:1;display:flex;flex-direction:column;justify-content:center;gap:12px;padding:32px;border-radius:16px;border:1px dashed #C9CFD1;background:#FAFAF7">
+          <p style="font:600 20px/1.35 Manrope,sans-serif;color:#14232E">There are no published vacancies at present.</p>
+          <p style="font:400 16px/1.6 Inter,sans-serif;color:#4A555C">When an opening is approved, it will be listed here with full details and an online application.</p>
+        </div>
+      </sc-if>
+      <sc-if value="{{ hasVacancies }}" hint-placeholder-val="{{ false }}">
+        <a href="#/careers/sample" style="display:flex;flex-direction:column;gap:14px;padding:24px;border-radius:16px;border:1px solid #E4E6E3;background:#F5F4EF;text-decoration:none;color:#20282D;transition:border-color .2s ease,transform .2s ease" style-hover="border-color:#B69A62;transform:translateY(-2px);color:#20282D">
+          <span style="font:600 10.5px/1.3 Inter,sans-serif;letter-spacing:.08em;color:#7A6338">SAMPLE LISTING · INTERNAL PREVIEW · NOT A REAL VACANCY</span>
+          <span style="display:flex;justify-content:space-between;align-items:center;gap:16px">
+            <span style="font:600 clamp(22px,2vw,28px)/1.2 Manrope,sans-serif;color:#14232E">Security Officer</span>
+            <span aria-hidden="true" style="width:40px;height:40px;border-radius:10px;background:#14232E;color:#FFFFFF;display:grid;place-items:center;flex:0 0 auto">→</span>
+          </span>
+          <span style="font:500 14px/1.4 Inter,sans-serif;color:#5A666E">Location: to be confirmed · Type: to be confirmed</span>
+        </a>
+      </sc-if>
+    </div>
+  </section>
+</sc-if>
+
+<sc-if value="{{ isVacancy }}" hint-placeholder-val="{{ false }}">
+  <section aria-labelledby="vd-h" data-screen-label="Vacancy" style="max-width:860px;margin:0 auto;padding:clamp(40px,6vw,88px) clamp(20px,4vw,56px) 0;display:flex;flex-direction:column;gap:28px">
+    <a href="#/careers" style="font:500 15px/1 Inter,sans-serif;color:#14232E;display:inline-flex;gap:8px;min-height:44px;align-items:center;align-self:flex-start"><span aria-hidden="true">←</span> All vacancies</a>
+    <sc-if value="{{ vacancyClosed }}" hint-placeholder-val="{{ false }}">
+      <div style="display:flex;flex-direction:column;gap:16px;padding:clamp(28px,4vw,48px);border-radius:20px;background:#FFFFFF;border:1px solid #E4E6E3">
+        <h1 id="vd-h" style="font:600 clamp(30px,4vw,46px)/1.08 Manrope,sans-serif;letter-spacing:-.03em;color:#14232E">This vacancy is no longer available.</h1>
+        <p style="font:400 17px/1.6 Inter,sans-serif;color:#4A555C">The position may have closed or been removed. Applications can only be submitted for currently published roles.</p>
+        <div><a href="#/careers" style="display:inline-flex;align-items:center;min-height:50px;padding:0 22px;border:1px solid #14232E;color:#14232E;font:600 15px Inter,sans-serif;text-decoration:none;border-radius:12px">View current vacancies</a></div>
+      </div>
+    </sc-if>
+    <sc-if value="{{ vacancyOpen }}" hint-placeholder-val="{{ false }}">
+      <div style="display:flex;flex-direction:column;gap:16px">
+        <p style="font:600 10.5px/1.3 Inter,sans-serif;letter-spacing:.08em;color:#7A6338">SAMPLE LISTING · INTERNAL PREVIEW · NOT A REAL VACANCY</p>
+        <h1 id="vd-h" style="font:600 clamp(40px,5vw,64px)/1 Manrope,sans-serif;letter-spacing:-.04em;color:#14232E">Security Officer</h1>
+        <div style="display:flex;flex-wrap:wrap;gap:8px">
+          <span style="font:500 14px/1 Inter,sans-serif;padding:10px 14px;border-radius:999px;background:#FFFFFF;border:1px solid #E4E6E3;color:#20282D">Location: to be confirmed</span>
+          <span style="font:500 14px/1 Inter,sans-serif;padding:10px 14px;border-radius:999px;background:#FFFFFF;border:1px solid #E4E6E3;color:#20282D">Type: to be confirmed</span>
+        </div>
+      </div>
+      <div style="border-top:1px solid #D9DEDF;padding-top:28px;display:flex;flex-direction:column;gap:12px">
+        <h2 style="font:600 20px/1.3 Manrope,sans-serif;color:#14232E">About the role</h2>
+        <p style="font:400 17px/1.7 Inter,sans-serif;color:#4A555C">[Approved job description, responsibilities, and requirements appear here once published by the recruitment manager.]</p>
+      </div>
+
+      <sc-if value="{{ appSuccess }}" hint-placeholder-val="{{ false }}">
+        <div role="status" style="background:#FFFFFF;border-radius:20px;border:1px solid #CFE3D7;padding:clamp(28px,4vw,44px);display:flex;flex-direction:column;gap:14px">
+          <p style="display:flex;align-items:center;gap:10px;font:600 12px/1 Inter,sans-serif;letter-spacing:.12em;color:#276749"><span aria-hidden="true" style="width:22px;height:22px;border-radius:50%;background:#276749;color:#FFFFFF;display:grid;place-items:center;font-size:12px">✓</span>APPLICATION RECEIVED</p>
+          <h2 ref="{{ appDoneRef }}" tabindex="-1" style="font:600 26px/1.2 Manrope,sans-serif;color:#14232E;outline:none">Thank you. Your application for this position has been received by Maddox Security Services.</h2>
+          <div><a href="#/careers" style="font:600 15px Inter,sans-serif;color:#14232E;display:inline-flex;min-height:44px;align-items:center">Back to Careers</a></div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ appShowForm }}" hint-placeholder-val="{{ true }}">
+        <form onSubmit="{{ submitApp }}" noValidate="{{ true }}" aria-labelledby="app-h" style="background:#FFFFFF;border-radius:24px;border:1px solid #E4E6E3;padding:clamp(24px,4vw,44px);display:flex;flex-direction:column;gap:22px;position:relative">
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <h2 id="app-h" style="font:600 28px/1.15 Manrope,sans-serif;letter-spacing:-.025em;color:#14232E">Apply for this position</h2>
+            <p style="font:400 14px/1.5 Inter,sans-serif;color:#5A666E">Fields marked <span aria-hidden="true" style="color:#B42318">*</span> are required. Please do not include identity numbers, bank details, or other sensitive personal records.</p>
+          </div>
+          <sc-if value="{{ appSummaryShown }}" hint-placeholder-val="{{ false }}">
+            <div ref="{{ appSummaryRef }}" tabindex="-1" role="alert" style="border:1px solid #E8B4AE;border-radius:14px;background:#FDF3F2;padding:18px 20px;display:flex;flex-direction:column;gap:10px;outline:none">
+              <p style="font:600 16px/1.4 Inter,sans-serif;color:#7A1A12">{{ appSummaryTitle }}</p>
+              <sc-for list="{{ appErrList }}" as="err" hint-placeholder-count="0">
+                <button type="button" onClick="{{ err.focus }}" style="align-self:flex-start;background:none;border:0;padding:2px 0;font:500 15px/1.4 Inter,sans-serif;color:#7A1A12;text-decoration:underline;cursor:pointer;text-align:left">{{ err.text }}</button>
+              </sc-for>
+            </div>
+          </sc-if>
+          <input type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px">
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr));gap:20px">
+            <div style="display:flex;flex-direction:column;gap:8px">
+              <label for="a-fullName" style="font:600 14px/1.3 Inter,sans-serif;color:#20282D">Full name <span aria-hidden="true" style="color:#B42318">*</span></label>
+              <input id="a-fullName" name="fullName" autocomplete="name" maxlength="120" aria-required="true" aria-invalid="{{ ai.fullName }}" aria-describedby="a-fullName-err" style="width:100%;min-height:50px;padding:12px 14px;font:400 16px/1.4 Inter,sans-serif;color:#20282D;background:#FAFAF7;border:1px solid {{ ab.fullName }};border-radius:10px" style-focus="background:#FFFFFF;border-color:#14232E;box-shadow:0 0 0 4px rgba(20,35,46,.12);outline:none">
+              <sc-if value="{{ ah.fullName }}" hint-placeholder-val="{{ false }}"><p id="a-fullName-err" style="font:500 14px/1.4 Inter,sans-serif;color:#B42318">{{ ae.fullName }}</p></sc-if>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:8px">
+              <label for="a-email" style="font:600 14px/1.3 Inter,sans-serif;color:#20282D">Email address <span aria-hidden="true" style="color:#B42318">*</span></label>
+              <input id="a-email" name="email" type="email" autocomplete="email" maxlength="160" aria-required="true" aria-invalid="{{ ai.email }}" aria-describedby="a-email-err" style="width:100%;min-height:50px;padding:12px 14px;font:400 16px/1.4 Inter,sans-serif;color:#20282D;background:#FAFAF7;border:1px solid {{ ab.email }};border-radius:10px" style-focus="background:#FFFFFF;border-color:#14232E;box-shadow:0 0 0 4px rgba(20,35,46,.12);outline:none">
+              <sc-if value="{{ ah.email }}" hint-placeholder-val="{{ false }}"><p id="a-email-err" style="font:500 14px/1.4 Inter,sans-serif;color:#B42318">{{ ae.email }}</p></sc-if>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:8px">
+              <label for="a-phone" style="font:600 14px/1.3 Inter,sans-serif;color:#20282D">Telephone <span style="font-weight:400;color:#5A666E">(optional)</span></label>
+              <input id="a-phone" name="phone" type="tel" autocomplete="tel" maxlength="24" aria-invalid="{{ ai.phone }}" aria-describedby="a-phone-err" style="width:100%;min-height:50px;padding:12px 14px;font:400 16px/1.4 Inter,sans-serif;color:#20282D;background:#FAFAF7;border:1px solid {{ ab.phone }};border-radius:10px" style-focus="background:#FFFFFF;border-color:#14232E;box-shadow:0 0 0 4px rgba(20,35,46,.12);outline:none">
+              <sc-if value="{{ ah.phone }}" hint-placeholder-val="{{ false }}"><p id="a-phone-err" style="font:500 14px/1.4 Inter,sans-serif;color:#B42318">{{ ae.phone }}</p></sc-if>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:8px">
+              <label for="a-position" style="font:600 14px/1.3 Inter,sans-serif;color:#20282D">Position applied for</label>
+              <input id="a-position" name="position" value="Security Officer" readOnly="{{ true }}" style="width:100%;min-height:50px;padding:12px 14px;font:400 16px/1.4 Inter,sans-serif;color:#20282D;background:#F0EFEA;border:1px solid #E4E6E3;border-radius:10px">
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <label for="a-experience" style="font:600 14px/1.3 Inter,sans-serif;color:#20282D">Relevant experience <span style="font-weight:400;color:#5A666E">(optional)</span></label>
+            <textarea id="a-experience" name="experience" rows="4" maxlength="2000" style="width:100%;padding:12px 14px;font:400 16px/1.5 Inter,sans-serif;color:#20282D;background:#FAFAF7;border:1px solid #B8C0C3;border-radius:10px;resize:vertical" style-focus="background:#FFFFFF;border-color:#14232E;box-shadow:0 0 0 4px rgba(20,35,46,.12);outline:none"></textarea>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <label for="a-resume" style="font:600 14px/1.3 Inter,sans-serif;color:#20282D">Resume <span style="font-weight:400;color:#5A666E">(optional)</span></label>
+            <p id="a-resume-help" style="font:400 14px/1.5 Inter,sans-serif;color:#5A666E">PDF, DOC, or DOCX, up to 5 MB. Stored privately and seen only by authorized recruitment staff.</p>
+            <input id="a-resume" name="resume" type="file" accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document" aria-invalid="{{ ai.resume }}" aria-describedby="a-resume-help a-resume-err" style="width:100%;min-height:56px;padding:14px;font:400 15px Inter,sans-serif;color:#20282D;background:#FAFAF7;border:1.5px dashed {{ ab.resume }};border-radius:12px">
+            <sc-if value="{{ ah.resume }}" hint-placeholder-val="{{ false }}"><p id="a-resume-err" style="font:500 14px/1.4 Inter,sans-serif;color:#B42318">{{ ae.resume }}</p></sc-if>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <label for="a-cover" style="font:600 14px/1.3 Inter,sans-serif;color:#20282D">Short cover message <span style="font-weight:400;color:#5A666E">(optional)</span></label>
+            <textarea id="a-cover" name="cover" rows="4" maxlength="2000" style="width:100%;padding:12px 14px;font:400 16px/1.5 Inter,sans-serif;color:#20282D;background:#FAFAF7;border:1px solid #B8C0C3;border-radius:10px;resize:vertical" style-focus="background:#FFFFFF;border-color:#14232E;box-shadow:0 0 0 4px rgba(20,35,46,.12);outline:none"></textarea>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <label style="display:flex;gap:12px;align-items:flex-start;font:400 15px/1.5 Inter,sans-serif;color:#20282D;cursor:pointer">
+              <input id="a-privacy" name="privacy" type="checkbox" aria-required="true" aria-invalid="{{ ai.privacy }}" aria-describedby="a-privacy-err" style="width:22px;height:22px;margin:1px 0 0;accent-color:#14232E;flex:0 0 auto">
+              <span>I agree that Maddox Security Services may use the information I provide to process my application, as described in the <a href="#/privacy">privacy policy</a>. <span aria-hidden="true" style="color:#B42318">*</span></span>
+            </label>
+            <sc-if value="{{ ah.privacy }}" hint-placeholder-val="{{ false }}"><p id="a-privacy-err" style="font:500 14px/1.4 Inter,sans-serif;color:#B42318;padding-left:34px">{{ ae.privacy }}</p></sc-if>
+          </div>
+          <div>
+            <button type="submit" disabled="{{ appBusy }}" aria-busy="{{ appBusy }}" style="min-height:56px;padding:0 30px;background:#14232E;color:#FFFFFF;border:0;border-radius:12px;font:600 16px Inter,sans-serif;cursor:pointer;opacity:{{ appBtnOpacity }}" style-hover="background:#20282D">{{ appBtn }}</button>
+          </div>
+          <div role="status" aria-live="polite" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">{{ appLive }}</div>
+        </form>
+      </sc-if>
+    </sc-if>
+  </section>
+</sc-if>
+
+<!-- ================= CONTACT ================= -->
+<sc-if value="{{ isContact }}" hint-placeholder-val="{{ false }}">
+  <section aria-labelledby="ct-h" data-screen-label="Contact" style="background:#14232E;color:#F5F4EF;position:relative">
+    <div aria-hidden="true" style="position:absolute;inset:0;pointer-events:none;background-image:linear-gradient(90deg,rgba(245,244,239,.045) 1px,transparent 1px);background-size:calc(100% / 6) 100%"></div>
+    <div style="position:relative;max-width:1440px;margin:0 auto;padding:clamp(48px,6vw,96px) clamp(20px,4vw,56px) clamp(140px,14vw,200px);display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,460px),1fr));gap:28px 72px;align-items:end">
+      <div style="display:flex;flex-direction:column;gap:26px">
+        <p style="display:inline-flex;align-self:flex-start;align-items:center;gap:10px;padding:9px 14px;border:1px solid rgba(182,154,98,.45);border-radius:999px;font:600 11.5px/1 Inter,sans-serif;letter-spacing:.16em;color:#D4BC8A"><span aria-hidden="true" style="width:6px;height:6px;border-radius:50%;background:#B69A62"></span>SERVICE ASSESSMENT</p>
+        <h1 id="ct-h" style="font:600 clamp(40px,5.4vw,80px)/.98 Manrope,sans-serif;letter-spacing:-.045em;color:#FFFFFF;text-wrap:balance">Request a Security Service Assessment</h1>
+      </div>
+      <p style="font:400 clamp(17px,1.3vw,19px)/1.6 Inter,sans-serif;color:#C9CFD2;max-width:30em">Tell us a little about your organization and the type of security support you're considering.</p>
+    </div>
+  </section>
+
+  <section aria-label="Enquiry form and contact details" style="max-width:1440px;margin:clamp(-160px,-12vw,-110px) auto 0;padding:0 clamp(20px,4vw,56px);position:relative;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:16px;align-items:start">
+    <div style="grid-column:{{ formSpan }};min-width:0;max-width:100%">
+      <sc-if value="{{ enqSuccess }}" hint-placeholder-val="{{ false }}">
+        <div role="status" style="background:#FFFFFF;border-radius:24px;border:1px solid #CFE3D7;padding:clamp(28px,4vw,56px);display:flex;flex-direction:column;gap:18px;box-shadow:0 32px 64px -32px rgba(20,35,46,.35)">
+          <p style="display:flex;align-items:center;gap:10px;font:600 12px/1 Inter,sans-serif;letter-spacing:.12em;color:#276749"><span aria-hidden="true" style="width:24px;height:24px;border-radius:50%;background:#276749;color:#FFFFFF;display:grid;place-items:center;font-size:12px">✓</span>ENQUIRY SENT</p>
+          <h2 ref="{{ enqDoneRef }}" tabindex="-1" style="font:600 clamp(26px,3vw,38px)/1.12 Manrope,sans-serif;letter-spacing:-.03em;color:#14232E;outline:none">Thank you for contacting Maddox Security Services. Your enquiry has been received.</h2>
+          <p style="font:400 16px/1.6 Inter,sans-serif;color:#4A555C">If you need to add anything, you can reach us at <a href="mailto:chase.maddox@outlook.com">chase.maddox@outlook.com</a> or <a href="tel:+14047989172">+1 (404) 798-9172</a>.</p>
+          <div style="display:flex;flex-wrap:wrap;gap:12px;margin-top:6px">
+            <a href="#/services" style="display:inline-flex;align-items:center;min-height:50px;padding:0 22px;border:1px solid #14232E;color:#14232E;font:600 15px Inter,sans-serif;text-decoration:none;border-radius:12px">Explore Services</a>
+            <a href="#/" style="display:inline-flex;align-items:center;min-height:50px;padding:0 12px;color:#14232E;font:600 15px Inter,sans-serif">Return home</a>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ enqShowForm }}" hint-placeholder-val="{{ true }}">
+        <form onSubmit="{{ submitEnq }}" noValidate="{{ true }}" aria-labelledby="enq-h" style="background:#FFFFFF;border-radius:24px;border:1px solid #E4E6E3;padding:clamp(24px,4vw,48px);display:flex;flex-direction:column;gap:30px;box-shadow:0 32px 64px -32px rgba(20,35,46,.35);position:relative">
+          <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:8px 24px">
+            <h2 id="enq-h" style="font:600 28px/1.15 Manrope,sans-serif;letter-spacing:-.025em;color:#14232E">Service enquiry</h2>
+            <p style="font:400 14px/1.5 Inter,sans-serif;color:#5A666E">Fields marked <span aria-hidden="true" style="color:#B42318">*</span> are required.</p>
+          </div>
+
+          <sc-if value="{{ enqSummaryShown }}" hint-placeholder-val="{{ false }}">
+            <div ref="{{ enqSummaryRef }}" tabindex="-1" role="alert" style="border:1px solid #E8B4AE;border-radius:14px;background:#FDF3F2;padding:18px 20px;display:flex;flex-direction:column;gap:10px;outline:none">
+              <p style="font:600 16px/1.4 Inter,sans-serif;color:#7A1A12">{{ enqSummaryTitle }}</p>
+              <sc-if value="{{ enqSummaryBodyShown }}" hint-placeholder-val="{{ false }}"><p style="font:400 15px/1.55 Inter,sans-serif;color:#7A1A12">{{ enqSummaryBody }}</p></sc-if>
+              <sc-for list="{{ enqErrList }}" as="err" hint-placeholder-count="0">
+                <button type="button" onClick="{{ err.focus }}" style="align-self:flex-start;background:none;border:0;padding:2px 0;font:500 15px/1.4 Inter,sans-serif;color:#7A1A12;text-decoration:underline;cursor:pointer;text-align:left">{{ err.text }}</button>
+              </sc-for>
+            </div>
+          </sc-if>
+
+          <input type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px">
+
+          <fieldset style="border:0;margin:0;padding:0;display:flex;flex-direction:column;gap:20px;min-width:0">
+            <legend style="float:left;width:100%;padding:0 0 16px;display:flex;align-items:center;gap:12px;font:600 12px/1 Inter,sans-serif;letter-spacing:.14em;color:#7A6338"><span style="width:26px;height:26px;border-radius:50%;background:#14232E;color:#FFFFFF;display:grid;place-items:center;letter-spacing:0">1</span>CONTACT INFORMATION</legend>
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,230px),1fr));gap:20px">
+              <div style="display:flex;flex-direction:column;gap:8px">
+                <label for="f-company" style="font:600 14px/1.3 Inter,sans-serif;color:#20282D">Company name <span aria-hidden="true" style="color:#B42318">*</span></label>
+                <input id="f-company" name="company" autocomplete="organization" maxlength="120" aria-required="true" aria-invalid="{{ ei.company }}" aria-describedby="f-company-err" style="width:100%;min-height:50px;padding:12px 14px;font:400 16px/1.4 Inter,sans-serif;color:#20282D;background:#FAFAF7;border:1px solid {{ eb.company }};border-radius:10px" style-focus="background:#FFFFFF;border-color:#14232E;box-shadow:0 0 0 4px rgba(20,35,46,.12);outline:none">
+                <sc-if value="{{ eh.company }}" hint-placeholder-val="{{ false }}"><p id="f-company-err" style="font:500 14px/1.4 Inter,sans-serif;color:#B42318">{{ ee.company }}</p></sc-if>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:8px">
+                <label for="f-name" style="font:600 14px/1.3 Inter,sans-serif;color:#20282D">Your name <span aria-hidden="true" style="color:#B42318">*</span></label>
+                <input id="f-name" name="name" autocomplete="name" maxlength="120" aria-required="true" aria-invalid="{{ ei.name }}" aria-describedby="f-name-err" style="width:100%;min-height:50px;padding:12px 14px;font:400 16px/1.4 Inter,sans-serif;color:#20282D;background:#FAFAF7;border:1px solid {{ eb.name }};border-radius:10px" style-focus="background:#FFFFFF;border-color:#14232E;box-shadow:0 0 0 4px rgba(20,35,46,.12);outline:none">
+                <sc-if value="{{ eh.name }}" hint-placeholder-val="{{ false }}"><p id="f-name-err" style="font:500 14px/1.4 Inter,sans-serif;color:#B42318">{{ ee.name }}</p></sc-if>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:8px">
+                <label for="f-email" style="font:600 14px/1.3 Inter,sans-serif;color:#20282D">Business email <span aria-hidden="true" style="color:#B42318">*</span></label>
+                <input id="f-email" name="email" type="email" autocomplete="email" maxlength="160" aria-required="true" aria-invalid="{{ ei.email }}" aria-describedby="f-email-err" style="width:100%;min-height:50px;padding:12px 14px;font:400 16px/1.4 Inter,sans-serif;color:#20282D;background:#FAFAF7;border:1px solid {{ eb.email }};border-radius:10px" style-focus="background:#FFFFFF;border-color:#14232E;box-shadow:0 0 0 4px rgba(20,35,46,.12);outline:none">
+                <sc-if value="{{ eh.email }}" hint-placeholder-val="{{ false }}"><p id="f-email-err" style="font:500 14px/1.4 Inter,sans-serif;color:#B42318">{{ ee.email }}</p></sc-if>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:8px">
+                <label for="f-phone" style="font:600 14px/1.3 Inter,sans-serif;color:#20282D">Phone <span style="font-weight:400;color:#5A666E">(optional)</span></label>
+                <input id="f-phone" name="phone" type="tel" autocomplete="tel" maxlength="24" aria-invalid="{{ ei.phone }}" aria-describedby="f-phone-err" style="width:100%;min-height:50px;padding:12px 14px;font:400 16px/1.4 Inter,sans-serif;color:#20282D;background:#FAFAF7;border:1px solid {{ eb.phone }};border-radius:10px" style-focus="background:#FFFFFF;border-color:#14232E;box-shadow:0 0 0 4px rgba(20,35,46,.12);outline:none">
+                <sc-if value="{{ eh.phone }}" hint-placeholder-val="{{ false }}"><p id="f-phone-err" style="font:500 14px/1.4 Inter,sans-serif;color:#B42318">{{ ee.phone }}</p></sc-if>
+              </div>
+            </div>
+          </fieldset>
+
+          <fieldset style="border:0;border-top:1px solid #E4E6E3;margin:0;padding:26px 0 0;display:flex;flex-direction:column;gap:20px;min-width:0">
+            <legend style="float:left;width:100%;padding:0 0 16px;display:flex;align-items:center;gap:12px;font:600 12px/1 Inter,sans-serif;letter-spacing:.14em;color:#7A6338"><span style="width:26px;height:26px;border-radius:50%;background:#14232E;color:#FFFFFF;display:grid;place-items:center;letter-spacing:0">2</span>SERVICE REQUIREMENTS</legend>
+            <div style="display:flex;flex-direction:column;gap:8px">
+              <label for="f-service" style="font:600 14px/1.3 Inter,sans-serif;color:#20282D">Service type <span aria-hidden="true" style="color:#B42318">*</span></label>
+              <select id="f-service" name="service" defaultValue="{{ preService }}" aria-required="true" aria-invalid="{{ ei.service }}" aria-describedby="f-service-note f-service-err" style="width:100%;min-height:50px;padding:12px 14px;font:400 16px/1.4 Inter,sans-serif;color:#20282D;background:#FAFAF7;border:1px solid {{ eb.service }};border-radius:10px" style-focus="background:#FFFFFF;border-color:#14232E;box-shadow:0 0 0 4px rgba(20,35,46,.12);outline:none">
+                <option value="">Select a service</option>
+                <sc-for list="{{ serviceOptions }}" as="opt" hint-placeholder-count="4">
+                  <option value="{{ opt.id }}">{{ opt.title }}</option>
+                </sc-for>
+                <option value="unsure">Not sure yet — discuss during consultation</option>
+              </select>
+              <sc-if value="{{ hasPreService }}" hint-placeholder-val="{{ false }}"><p id="f-service-note" style="font:400 14px/1.4 Inter,sans-serif;color:#5A666E">Preselected from the service you were viewing — you can change it.</p></sc-if>
+              <sc-if value="{{ eh.service }}" hint-placeholder-val="{{ false }}"><p id="f-service-err" style="font:500 14px/1.4 Inter,sans-serif;color:#B42318">{{ ee.service }}</p></sc-if>
+            </div>
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,230px),1fr));gap:20px">
+              <div style="display:flex;flex-direction:column;gap:8px">
+                <label for="f-location" style="font:600 14px/1.3 Inter,sans-serif;color:#20282D">Coverage location <span aria-hidden="true" style="color:#B42318">*</span></label>
+                <input id="f-location" name="location" autocomplete="address-level2" maxlength="120" aria-required="true" aria-invalid="{{ ei.location }}" aria-describedby="f-location-help f-location-err" style="width:100%;min-height:50px;padding:12px 14px;font:400 16px/1.4 Inter,sans-serif;color:#20282D;background:#FAFAF7;border:1px solid {{ eb.location }};border-radius:10px" style-focus="background:#FFFFFF;border-color:#14232E;box-shadow:0 0 0 4px rgba(20,35,46,.12);outline:none">
+                <p id="f-location-help" style="font:400 13px/1.4 Inter,sans-serif;color:#5A666E">City, town, or general service area.</p>
+                <sc-if value="{{ eh.location }}" hint-placeholder-val="{{ false }}"><p id="f-location-err" style="font:500 14px/1.4 Inter,sans-serif;color:#B42318">{{ ee.location }}</p></sc-if>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:8px">
+                <label for="f-site" style="font:600 14px/1.3 Inter,sans-serif;color:#20282D">Site or service type <span style="font-weight:400;color:#5A666E">(optional)</span></label>
+                <input id="f-site" name="site" maxlength="120" aria-describedby="f-site-help" style="width:100%;min-height:50px;padding:12px 14px;font:400 16px/1.4 Inter,sans-serif;color:#20282D;background:#FAFAF7;border:1px solid #B8C0C3;border-radius:10px" style-focus="background:#FFFFFF;border-color:#14232E;box-shadow:0 0 0 4px rgba(20,35,46,.12);outline:none">
+                <p id="f-site-help" style="font:400 13px/1.4 Inter,sans-serif;color:#5A666E">For example: office building, retail unit, event.</p>
+              </div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:8px">
+              <label for="f-req" style="font:600 14px/1.3 Inter,sans-serif;color:#20282D">Service requirements <span aria-hidden="true" style="color:#B42318">*</span></label>
+              <p id="f-req-help" style="font:400 14px/1.5 Inter,sans-serif;color:#5A666E">A general description of the support you need. Please do not include access codes, security credentials, or sensitive operational details.</p>
+              <textarea id="f-req" name="requirements" rows="5" maxlength="2000" aria-required="true" aria-invalid="{{ ei.requirements }}" aria-describedby="f-req-help f-req-err" style="width:100%;padding:12px 14px;font:400 16px/1.5 Inter,sans-serif;color:#20282D;background:#FAFAF7;border:1px solid {{ eb.requirements }};border-radius:10px;resize:vertical" style-focus="background:#FFFFFF;border-color:#14232E;box-shadow:0 0 0 4px rgba(20,35,46,.12);outline:none"></textarea>
+              <sc-if value="{{ eh.requirements }}" hint-placeholder-val="{{ false }}"><p id="f-req-err" style="font:500 14px/1.4 Inter,sans-serif;color:#B42318">{{ ee.requirements }}</p></sc-if>
+            </div>
+          </fieldset>
+
+          <fieldset style="border:0;border-top:1px solid #E4E6E3;margin:0;padding:26px 0 0;display:flex;flex-direction:column;gap:20px;min-width:0">
+            <legend style="float:left;width:100%;padding:0 0 16px;display:flex;align-items:center;gap:12px;font:600 12px/1 Inter,sans-serif;letter-spacing:.14em;color:#7A6338"><span style="width:26px;height:26px;border-radius:50%;background:#14232E;color:#FFFFFF;display:grid;place-items:center;letter-spacing:0">3</span>ANYTHING ELSE</legend>
+            <div style="display:flex;flex-direction:column;gap:8px">
+              <label for="f-msg" style="font:600 14px/1.3 Inter,sans-serif;color:#20282D">Additional message <span style="font-weight:400;color:#5A666E">(optional)</span></label>
+              <textarea id="f-msg" name="message" rows="3" maxlength="2000" style="width:100%;padding:12px 14px;font:400 16px/1.5 Inter,sans-serif;color:#20282D;background:#FAFAF7;border:1px solid #B8C0C3;border-radius:10px;resize:vertical" style-focus="background:#FFFFFF;border-color:#14232E;box-shadow:0 0 0 4px rgba(20,35,46,.12);outline:none"></textarea>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:8px">
+              <label style="display:flex;gap:12px;align-items:flex-start;font:400 15px/1.5 Inter,sans-serif;color:#20282D;cursor:pointer">
+                <input id="f-privacy" name="privacy" type="checkbox" aria-required="true" aria-invalid="{{ ei.privacy }}" aria-describedby="f-privacy-err" style="width:22px;height:22px;margin:1px 0 0;accent-color:#14232E;flex:0 0 auto">
+                <span>I agree that Maddox Security Services may use these details to respond to my enquiry, as described in the <a href="#/privacy">privacy policy</a>. <span aria-hidden="true" style="color:#B42318">*</span></span>
+              </label>
+              <sc-if value="{{ eh.privacy }}" hint-placeholder-val="{{ false }}"><p id="f-privacy-err" style="font:500 14px/1.4 Inter,sans-serif;color:#B42318;padding-left:34px">{{ ee.privacy }}</p></sc-if>
+            </div>
+          </fieldset>
+
+          <div style="display:flex;flex-wrap:wrap;gap:16px;align-items:center">
+            <button type="submit" disabled="{{ enqBusy }}" aria-busy="{{ enqBusy }}" style="min-height:58px;padding:0 32px;background:#14232E;color:#FFFFFF;border:0;border-radius:12px;font:600 16px Inter,sans-serif;cursor:pointer;opacity:{{ enqBtnOpacity }};transition:background .2s ease" style-hover="background:#20282D">{{ enqBtn }}</button>
+            <p style="font:400 14px/1.5 Inter,sans-serif;color:#5A666E">Or call <a href="tel:+14047989172">+1 (404) 798-9172</a></p>
+          </div>
+          <div role="status" aria-live="polite" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">{{ enqLive }}</div>
+        </form>
+      </sc-if>
+    </div>
+
+    <aside aria-label="Direct contact" style="display:flex;flex-direction:column;gap:16px;min-width:0">
+      <div style="background:#20282D;color:#F5F4EF;border-radius:24px;padding:clamp(24px,3vw,36px);display:flex;flex-direction:column;gap:22px;box-shadow:0 32px 64px -32px rgba(20,35,46,.35)">
+        <h2 style="font:600 12px/1 Inter,sans-serif;letter-spacing:.16em;color:#D4BC8A">CONTACT DIRECTLY</h2>
+        <a href="tel:+14047989172" style="display:flex;flex-direction:column;gap:6px;padding:16px;border-radius:14px;background:rgba(255,255,255,.05);text-decoration:none;color:#FFFFFF" style-hover="background:rgba(255,255,255,.1);color:#FFFFFF">
+          <span style="font:500 13px/1.4 Inter,sans-serif;color:#AEB7BC">Phone</span>
+          <span style="font:600 20px/1.3 Manrope,sans-serif">+1 (404) 798-9172</span>
+        </a>
+        <a href="mailto:chase.maddox@outlook.com" style="display:flex;flex-direction:column;gap:6px;padding:16px;border-radius:14px;background:rgba(255,255,255,.05);text-decoration:none;color:#FFFFFF" style-hover="background:rgba(255,255,255,.1);color:#FFFFFF">
+          <span style="font:500 13px/1.4 Inter,sans-serif;color:#AEB7BC">Email</span>
+          <span style="font:600 17px/1.3 Manrope,sans-serif;overflow-wrap:anywhere">chase.maddox@outlook.com</span>
+        </a>
+        <div style="display:flex;flex-direction:column;gap:6px;padding:16px">
+          <span style="font:500 13px/1.4 Inter,sans-serif;color:#AEB7BC">Address</span>
+          <address style="font:500 16px/1.5 Inter,sans-serif;font-style:normal;color:#F5F4EF">1000 Washington St<br>Boston, MA 21180</address>
+        </div>
+      </div>
+      <div style="border-radius:20px;background:#FFFFFF;border:1px solid #E4E6E3;padding:22px;display:flex;flex-direction:column;gap:8px">
+        <p style="font:600 15px/1.4 Manrope,sans-serif;color:#14232E">Looking for a job?</p>
+        <p style="font:400 15px/1.5 Inter,sans-serif;color:#5A666E">This form is for service enquiries. For employment, please visit <a href="#/careers">Careers</a>.</p>
+      </div>
+    </aside>
+  </section>
+</sc-if>
+
+<!-- ================= LEGAL / 404 ================= -->
+<sc-if value="{{ isLegal }}" hint-placeholder-val="{{ false }}">
+  <section style="max-width:860px;margin:0 auto;padding:clamp(48px,6vw,88px) clamp(20px,4vw,56px) 0">
+    <div style="border-radius:20px;background:#FFFFFF;border:1px solid #E4E6E3;padding:clamp(28px,4vw,48px)">
+      <p style="font:400 17px/1.7 Inter,sans-serif;color:#4A555C">This document is being finalized and will be published here once approved. In the meantime, questions about how your information is handled can be sent to <a href="mailto:chase.maddox@outlook.com">chase.maddox@outlook.com</a>.</p>
+    </div>
+  </section>
+</sc-if>
+
+<sc-if value="{{ isNotFound }}" hint-placeholder-val="{{ false }}">
+  <section style="max-width:1440px;margin:0 auto;padding:clamp(40px,5vw,64px) clamp(20px,4vw,56px) 0;display:flex;flex-wrap:wrap;gap:12px">
+    <a href="#/" style="display:inline-flex;align-items:center;min-height:54px;padding:0 26px;background:#14232E;color:#FFFFFF;font:600 15px Inter,sans-serif;text-decoration:none;border-radius:12px">Go to the homepage</a>
+    <a href="#/contact" style="display:inline-flex;align-items:center;min-height:54px;padding:0 26px;border:1px solid #14232E;color:#14232E;font:600 15px Inter,sans-serif;text-decoration:none;border-radius:12px">Contact Maddox Security Services</a>
+  </section>
+</sc-if>
+
+<!-- ================= CLOSING CTA ================= -->
+<sc-if value="{{ showClosingCta }}" hint-placeholder-val="{{ true }}">
+  <section aria-labelledby="cta-h" style="max-width:1440px;margin:0 auto;padding:clamp(80px,9vw,128px) clamp(20px,4vw,56px) 0">
+    <div data-reveal="1" style="position:relative;overflow:hidden;border-radius:28px;background:#20282D;color:#F5F4EF;padding:clamp(40px,6vw,96px) clamp(24px,5vw,80px);display:flex;flex-direction:column;gap:clamp(32px,4vw,56px)">
+      <div aria-hidden="true" style="position:absolute;right:-12%;top:-40%;width:60%;aspect-ratio:1;border-radius:50%;border:1px solid rgba(182,154,98,.25);pointer-events:none"></div>
+      <div aria-hidden="true" style="position:absolute;right:-4%;top:-20%;width:40%;aspect-ratio:1;border-radius:50%;border:1px solid rgba(182,154,98,.18);pointer-events:none"></div>
+      <h2 id="cta-h" style="position:relative;font:600 clamp(38px,6vw,96px)/.98 Manrope,sans-serif;letter-spacing:-.045em;color:#FFFFFF;max-width:12em;text-wrap:balance">Let's Discuss Your Security Requirements.</h2>
+      <div style="position:relative;display:flex;flex-wrap:wrap;gap:24px 48px;align-items:center;justify-content:space-between">
+        <p style="font:400 17px/1.6 Inter,sans-serif;color:#C9CFD2;max-width:30em">Share a few details about your organization and the support you're considering, and we'll arrange a conversation.</p>
+        <div style="display:flex;flex-wrap:wrap;gap:12px">
+          <a href="#/contact" style="display:inline-flex;align-items:center;gap:14px;min-height:56px;padding:0 10px 0 24px;background:#F5F4EF;color:#14232E;font:600 16px Inter,sans-serif;text-decoration:none;border-radius:12px;transition:transform .2s ease" style-hover="background:#FFFFFF;color:#14232E;transform:translateY(-2px)">Request a Service Assessment<span aria-hidden="true" style="width:38px;height:38px;border-radius:9px;background:#B69A62;color:#14232E;display:grid;place-items:center">→</span></a>
+          <a href="tel:+14047989172" style="display:inline-flex;align-items:center;min-height:56px;padding:0 22px;border:1px solid rgba(245,244,239,.35);color:#F5F4EF;font:600 16px Inter,sans-serif;text-decoration:none;border-radius:12px" style-hover="border-color:#F5F4EF;color:#FFFFFF">Call +1 (404) 798-9172</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</sc-if>
+</main>
+
+<footer style="background:#14232E;color:#C9CFD2;margin-top:clamp(64px,7vw,104px);overflow:hidden">
+  <div style="max-width:1440px;margin:0 auto;padding:clamp(56px,6vw,88px) clamp(20px,4vw,56px) 28px;display:flex;flex-direction:column;gap:48px">
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr));gap:40px">
+      <div style="display:flex;flex-direction:column;gap:16px">
+        <p style="font:600 clamp(22px,2vw,28px)/1.2 Manrope,sans-serif;letter-spacing:-.02em;color:#FFFFFF;max-width:12em">Professional security services for organizations.</p>
+        <div><a href="#/contact" style="display:inline-flex;align-items:center;gap:10px;min-height:46px;padding:0 18px;border:1px solid rgba(245,244,239,.3);border-radius:10px;color:#FFFFFF;font:600 14px Inter,sans-serif;text-decoration:none" style-hover="border-color:#B69A62;color:#FFFFFF">Request a Consultation <span aria-hidden="true">→</span></a></div>
+      </div>
+      <nav aria-label="Footer" style="display:flex;flex-direction:column;gap:2px">
+        <p style="font:600 12px/1 Inter,sans-serif;letter-spacing:.14em;color:#D4BC8A;margin-bottom:12px">SITE</p>
+        <sc-for list="{{ navItems }}" as="item" hint-placeholder-count="6">
+          <a href="{{ item.href }}" style="font:400 15px/1 Inter,sans-serif;color:#E4E7E8;text-decoration:none;min-height:34px;display:flex;align-items:center" style-hover="color:#FFFFFF;text-decoration:underline">{{ item.label }}</a>
+        </sc-for>
+      </nav>
+      <div style="display:flex;flex-direction:column;gap:2px">
+        <p style="font:600 12px/1 Inter,sans-serif;letter-spacing:.14em;color:#D4BC8A;margin-bottom:12px">SERVICES</p>
+        <sc-for list="{{ services }}" as="item" hint-placeholder-count="4">
+          <a href="{{ item.detailHref }}" style="font:400 15px/1 Inter,sans-serif;color:#E4E7E8;text-decoration:none;min-height:34px;display:flex;align-items:center" style-hover="color:#FFFFFF;text-decoration:underline">{{ item.title }}</a>
+        </sc-for>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <p style="font:600 12px/1 Inter,sans-serif;letter-spacing:.14em;color:#D4BC8A;margin-bottom:6px">CONTACT</p>
+        <address style="font:400 15px/1.6 Inter,sans-serif;font-style:normal;color:#E4E7E8">1000 Washington St<br>Boston, MA 21180</address>
+        <a href="mailto:chase.maddox@outlook.com" style="font:400 15px/1.5 Inter,sans-serif;color:#E4E7E8;overflow-wrap:anywhere" style-hover="color:#FFFFFF">chase.maddox@outlook.com</a>
+        <a href="tel:+14047989172" style="font:400 15px/1.5 Inter,sans-serif;color:#E4E7E8" style-hover="color:#FFFFFF">+1 (404) 798-9172</a>
+      </div>
+    </div>
+    <p aria-hidden="true" style="font:800 clamp(64px,17vw,260px)/.8 Manrope,sans-serif;letter-spacing:-.04em;color:rgba(245,244,239,.06);margin:0 0 -.08em;white-space:nowrap;user-select:none">MADDOX</p>
+    <div style="border-top:1px solid rgba(245,244,239,.14);padding-top:24px;display:flex;flex-wrap:wrap;gap:12px 32px;justify-content:space-between;font:400 14px/1.5 Inter,sans-serif;color:#AEB7BC">
+      <p>© 2026 Maddox Security Services</p>
+      <div style="display:flex;gap:24px">
+        <a href="#/privacy" style="color:#E4E7E8" style-hover="color:#FFFFFF">Privacy policy</a>
+        <a href="#/terms" style="color:#E4E7E8" style-hover="color:#FFFFFF">Terms of use</a>
+      </div>
+    </div>
+  </div>
+</footer>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;showDrafts&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Content review&quot;},&quot;previewVacancy&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Content review&quot;},&quot;submitOutcome&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;success&quot;,&quot;server&quot;,&quot;network&quot;,&quot;ratelimit&quot;],&quot;default&quot;:&quot;success&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Form testing&quot;}}">
+const SERVICES = [
+  { id: 'guard', title: 'Guard Services', summary: 'Uniformed security personnel for commercial premises, arranged around your site and the way your organization operates.' },
+  { id: 'commercial', title: 'Commercial Security', summary: 'Security support for offices, commercial buildings, and business premises, scoped to the property and its daily operation.' },
+  { id: 'event', title: 'Event Security', summary: 'Security staffing for organized events, planned with the organizer around the venue and the format of the event.' },
+  { id: 'access', title: 'Access Control', summary: 'Support for managing entry to your premises and its access points. Scope is agreed with you during consultation.' },
+  { id: 'patrol', title: 'Mobile Patrol', summary: 'Shown in review only — awaiting owner confirmation that this service is offered.', draft: true }
+];
+const INDUSTRIES = [
+  { name: 'Commercial offices', related: 'Guard Services, Access Control', photo: 'Office lobby with reception desk', body: 'Offices often need a courteous front-of-house presence and a clear approach to visitors and entry points.' },
+  { name: 'Retail properties', related: 'Guard Services, Commercial Security', photo: 'Retail property exterior, daytime', body: 'Retail environments balance a welcoming customer experience with a visible professional presence.' },
+  { name: 'Residential property management', related: 'Guard Services, Access Control', photo: 'Managed residential building entrance', body: 'Property managers may need support that respects residents while managing building access.' },
+  { name: 'Events and venues', related: 'Event Security', photo: 'Venue entrance before an event', body: 'Events bring changing crowds and timings, so planning starts with the venue and the event format.' },
+  { name: 'Industrial and logistics facilities', related: 'Commercial Security, Access Control', photo: 'Logistics facility gatehouse', body: 'Larger sites with vehicle and staff movement may need structured entry and site security support.' }
+];
+const RATIOS = ['4/5', '1/1', '4/5', '3/4', '1/1'];
+const PAGE_HEROS = {
+  services: { pageLabel: 'Services', pageEyebrow: 'SERVICES', pageTitle: 'Security Services for Your Organization', pageIntro: 'Explore the services below, then get in touch to discuss your requirements. Scope is agreed with you during consultation, based on your site and how your organization operates.', pageHeroCta: true },
+  industries: { pageLabel: 'Industries', pageEyebrow: 'INDUSTRIES', pageTitle: 'Security for the Environments You Operate In', pageIntro: 'Every site has its own layout, visitors, and daily rhythm. Tell us about yours and we\u2019ll talk through whether our services are the right fit for your organization.', pageHeroCta: true },
+  company: { pageLabel: 'Company', pageEyebrow: 'COMPANY', pageTitle: 'Meet Maddox Security Services', pageIntro: 'A professional security services provider working with organizations through consultation-led engagement.', pageHeroCta: false },
+  careers: { pageLabel: 'Careers', pageEyebrow: 'CAREERS', pageTitle: 'Build Your Career With Maddox Security Services', pageIntro: 'Explore approved vacancies and apply online. Each listing explains the role and how to apply.', pageHeroCta: false },
+  privacy: { pageLabel: 'Legal', pageEyebrow: 'LEGAL', pageTitle: 'Privacy Policy', pageIntro: 'How Maddox Security Services handles information submitted through this website.', pageHeroCta: false },
+  terms: { pageLabel: 'Legal', pageEyebrow: 'LEGAL', pageTitle: 'Terms of Use', pageIntro: 'Terms governing use of this website.', pageHeroCta: false },
+  '404': { pageLabel: 'Not found', pageEyebrow: 'PAGE NOT FOUND', pageTitle: 'We couldn\u2019t find that page.', pageIntro: 'The page may have moved or no longer exists. Use the links below to continue.', pageHeroCta: false }
+};
+const CREDENTIALS = ['Licensing', 'Insurance', 'Qualifications', 'Certifications'];
+const NAV = [['Home', '#/', 'home'], ['Services', '#/services', 'services'], ['Industries', '#/industries', 'industries'], ['Company', '#/company', 'company'], ['Careers', '#/careers', 'careers'], ['Contact', '#/contact', 'contact']];
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+const PHONE_RE = /^[0-9+()\-.\s]{7,24}$/;
+const OUTCOMES = {
+  server: ['We couldn\u2019t send your submission just now.', 'Your details are still here. Please try again, or contact us by phone or email.'],
+  network: ['Your connection appears to have dropped.', 'Nothing was lost — check your connection and try again.'],
+  ratelimit: ['Too many submissions have been received from this connection.', 'Please wait a few minutes before trying again, or contact us directly.'],
+  spam: ['We couldn\u2019t accept this submission.', 'Please try again, or contact us directly by phone or email.']
+};
+const ENQ_FIELDS = { company: 'Company name', name: 'Your name', email: 'Business email', phone: 'Phone', service: 'Service type', location: 'Coverage location', requirements: 'Service requirements', privacy: 'Privacy acknowledgement' };
+const ENQ_IDS = { company: 'f-company', name: 'f-name', email: 'f-email', phone: 'f-phone', service: 'f-service', location: 'f-location', requirements: 'f-req', privacy: 'f-privacy' };
+const APP_FIELDS = { fullName: 'Full name', email: 'Email address', phone: 'Telephone', resume: 'Resume', privacy: 'Privacy acknowledgement' };
+
+class Component extends DCLogic {
+  state = { route: 'home', sub: null, query: {}, w: 1280, menu: false, openSvc: null, scrolled: false, enq: { status: 'idle', errors: {} }, app: { status: 'idle', errors: {} } };
+  menuBtnRef = React.createRef(); closeBtnRef = React.createRef(); mainRef = React.createRef();
+  enqSummaryRef = React.createRef(); enqDoneRef = React.createRef(); appSummaryRef = React.createRef(); appDoneRef = React.createRef();
+
+  componentDidMount() {
+    this.onHash = () => this.parse(false);
+    this.onResize = () => this.setState({ w: window.innerWidth });
+    this.onScroll = () => { const s = window.scrollY > 8; if (s !== this.state.scrolled) this.setState({ scrolled: s }); };
+    this.onKey = e => { if (e.key === 'Escape' && this.state.menu) this.closeMenu(); };
+    window.addEventListener('hashchange', this.onHash);
+    window.addEventListener('resize', this.onResize);
+    window.addEventListener('scroll', this.onScroll, { passive: true });
+    window.addEventListener('keydown', this.onKey);
+    this.onResize(); this.parse(true); this.reveal();
+  }
+  componentDidUpdate(pp, ps) { if (ps.route !== this.state.route || ps.sub !== this.state.sub || pp.showDrafts !== this.props.showDrafts) this.reveal(); }
+  reveal() {
+    if (this.io) this.io.disconnect();
+    if (!('IntersectionObserver' in window) || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    requestAnimationFrame(() => {
+      this.io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.style.opacity = '1'; e.target.style.transform = 'none'; this.io.unobserve(e.target); } }), { rootMargin: '0px 0px -8% 0px' });
+      document.querySelectorAll('[data-reveal]').forEach(el => {
+        if (el.dataset.revealed) return; el.dataset.revealed = '1';
+        const r = el.getBoundingClientRect(); if (r.top < window.innerHeight) return;
+        el.style.opacity = '0'; el.style.transform = 'translateY(24px)'; el.style.transition = 'opacity .7s cubic-bezier(.2,.7,.2,1), transform .7s cubic-bezier(.2,.7,.2,1)';
+        this.io.observe(el);
+      });
+    });
+  }
+  componentWillUnmount() {
+    window.removeEventListener('hashchange', this.onHash);
+    window.removeEventListener('resize', this.onResize);
+    window.removeEventListener('scroll', this.onScroll);
+    window.removeEventListener('keydown', this.onKey);
+    clearTimeout(this.t1); clearTimeout(this.t2);
+  }
+  parse(initial) {
+    const h = (location.hash || '#/').slice(1);
+    const [path, qs] = h.split('?');
+    const parts = path.split('/').filter(Boolean);
+    const route = parts[0] || 'home';
+    const sub = parts[1] || null;
+    const query = Object.fromEntries(new URLSearchParams(qs || ''));
+    const changed = route !== this.state.route || sub !== this.state.sub;
+    clearTimeout(this.t1); clearTimeout(this.t2);
+    this.setState({
+      route, sub, query, menu: false,
+      openSvc: route === 'services' && sub ? sub : (changed ? null : this.state.openSvc),
+      enq: changed ? { status: 'idle', errors: {} } : this.state.enq,
+      app: changed ? { status: 'idle', errors: {} } : this.state.app
+    }, () => {
+      if (initial) return;
+      if (route === 'services' && sub) { const el = document.getElementById('svc-' + sub); if (el) { window.scrollTo(0, el.getBoundingClientRect().top + window.scrollY - 96); return; } }
+      window.scrollTo(0, 0);
+    });
+  }
+  openMenu = () => this.setState({ menu: true }, () => this.closeBtnRef.current && this.closeBtnRef.current.focus());
+  closeMenu = () => this.setState({ menu: false }, () => this.menuBtnRef.current && this.menuBtnRef.current.focus());
+  skipToMain = () => this.mainRef.current && this.mainRef.current.focus();
+
+  published() { const d = this.props.showDrafts ?? false; return SERVICES.filter(s => d || !s.draft); }
+
+  validateEnq(v) {
+    const e = {};
+    if (!v.company.trim()) e.company = 'Enter your company name.';
+    if (!v.name.trim()) e.name = 'Enter your name.';
+    if (!v.email.trim()) e.email = 'Enter your business email address.';
+    else if (!EMAIL_RE.test(v.email.trim())) e.email = 'Enter an email address in the format name@company.com.';
+    if (v.phone.trim() && !PHONE_RE.test(v.phone.trim())) e.phone = 'Enter a phone number using digits, spaces, or + ( ) -.';
+    if (!v.service) e.service = 'Select a service type, or choose \u201cNot sure yet\u201d.';
+    if (!v.location.trim()) e.location = 'Enter a city, town, or general service area.';
+    if (v.requirements.trim().length < 20) e.requirements = 'Briefly describe the support you need (at least 20 characters).';
+    if (!v.privacy) e.privacy = 'Confirm the privacy acknowledgement to send your enquiry.';
+    return e;
+  }
+  validateApp(v, file) {
+    const e = {};
+    if (!v.fullName.trim()) e.fullName = 'Enter your full name.';
+    if (!v.email.trim()) e.email = 'Enter your email address.';
+    else if (!EMAIL_RE.test(v.email.trim())) e.email = 'Enter an email address in the format name@example.com.';
+    if (v.phone.trim() && !PHONE_RE.test(v.phone.trim())) e.phone = 'Enter a phone number using digits, spaces, or + ( ) -.';
+    if (file && file.size) {
+      if (!/\.(pdf|docx?)$/i.test(file.name)) e.resume = 'Upload a PDF, DOC, or DOCX file.';
+      else if (file.size > 5 * 1024 * 1024) e.resume = 'The file is larger than 5 MB. Upload a smaller file.';
+    }
+    if (!v.privacy) e.privacy = 'Confirm the privacy acknowledgement to submit your application.';
+    return e;
+  }
+  run(key, form, validate, summaryRef, doneRef) {
+    if (this.state[key].status === 'submitting') return;
+    const fd = new FormData(form);
+    const v = {}; fd.forEach((val, k) => { if (typeof val === 'string') v[k] = val; });
+    ['company','name','email','phone','location','requirements','fullName'].forEach(k => { if (v[k] == null) v[k] = ''; });
+    v.privacy = fd.get('privacy') === 'on';
+    const errors = validate(v, fd.get('resume'));
+    if (Object.keys(errors).length) { this.setState({ [key]: { status: 'invalid', errors } }, () => summaryRef.current && summaryRef.current.focus()); return; }
+    this.setState({ [key]: { status: 'submitting', errors: {} } });
+    const outcome = v.website ? 'spam' : (this.props.submitOutcome ?? 'success');
+    this[key === 'enq' ? 't1' : 't2'] = setTimeout(() => {
+      if (outcome === 'success') this.setState({ [key]: { status: 'success', errors: {} } }, () => { window.scrollTo(0, Math.max(0, (doneRef.current ? doneRef.current.getBoundingClientRect().top + window.scrollY : 0) - 140)); doneRef.current && doneRef.current.focus({ preventScroll: true }); });
+      else this.setState({ [key]: { status: outcome, errors: {} } }, () => summaryRef.current && summaryRef.current.focus());
+    }, 1400);
+  }
+  submitEnq = e => { e.preventDefault(); this.run('enq', e.currentTarget, v => this.validateEnq(v), this.enqSummaryRef, this.enqDoneRef); };
+  submitApp = e => { e.preventDefault(); this.run('app', e.currentTarget, (v, f) => this.validateApp(v, f), this.appSummaryRef, this.appDoneRef); };
+
+  fieldMaps(errors, keys) {
+    const msg = {}, has = {}, border = {}, inv = {};
+    keys.forEach(k => { msg[k] = errors[k] || ''; has[k] = !!errors[k]; border[k] = errors[k] ? '#B42318' : '#B8C0C3'; inv[k] = errors[k] ? 'true' : 'false'; });
+    return { msg, has, border, inv };
+  }
+  formVals(st, fields, ids, idPrefix, busyLabel, idleLabel) {
+    const keys = Object.keys(fields);
+    const m = this.fieldMaps(st.errors, keys);
+    const errList = keys.filter(k => st.errors[k]).map(k => ({ text: fields[k] + ': ' + st.errors[k], focus: () => { const el = document.getElementById(ids ? ids[k] : idPrefix + k); el && el.focus(); } }));
+    const out = OUTCOMES[st.status];
+    return {
+      m, errList,
+      summaryShown: st.status === 'invalid' || !!out,
+      summaryTitle: st.status === 'invalid' ? (errList.length === 1 ? 'There is 1 problem to fix:' : 'There are ' + errList.length + ' problems to fix:') : (out ? out[0] : ''),
+      summaryBody: out ? out[1] : '',
+      busy: st.status === 'submitting',
+      btn: st.status === 'submitting' ? busyLabel : (out ? 'Try Again' : idleLabel),
+      live: st.status === 'submitting' ? 'Sending\u2026' : ''
+    };
+  }
+
+  renderVals() {
+    const { route, sub, query, w, menu, openSvc, enq, app, scrolled } = this.state;
+    const showDrafts = this.props.showDrafts ?? false;
+    const previewVacancy = this.props.previewVacancy ?? false;
+    const pubs = this.published();
+    const services = pubs.map((s, i) => {
+      const open = openSvc === s.id;
+      return {
+        ...s, n: String(i + 1).padStart(2, '0'), draft: !!s.draft,
+        anchor: 'svc-' + s.id, panelId: 'svc-panel-' + s.id, detailHref: '#/services/' + s.id,
+        open, expanded: open ? 'true' : 'false', cardBorder: open ? '#B69A62' : '#E4E6E3', btnLabel: open ? 'Hide details' : 'Service details', sign: open ? '\u2212' : '+',
+        btnBg: open ? '#14232E' : 'transparent', btnFg: open ? '#FFFFFF' : '#14232E',
+        toggle: () => this.setState({ openSvc: open ? null : s.id }),
+        overview: s.summary, enquireHref: '#/contact?service=' + s.id, enquireLabel: 'Discuss ' + s.title
+      };
+    });
+    const known = ['home', 'services', 'industries', 'company', 'careers', 'contact', 'privacy', 'terms'];
+    const r = known.includes(route) ? route : '404';
+    const preService = pubs.some(s => s.id === query.service) ? query.service : '';
+    const E = this.formVals(enq, ENQ_FIELDS, ENQ_IDS, '', 'Sending\u2026', 'Submit Enquiry');
+    const A = this.formVals(app, APP_FIELDS, null, 'a-', 'Submitting\u2026', 'Submit Application');
+    const isVacancy = r === 'careers' && !!sub;
+    const vacancyOpen = isVacancy && sub === 'sample' && previewVacancy;
+    return {
+      showDrafts, hideDrafts: !showDrafts,
+      wide: w >= 1000, narrow: w < 1000, menuOpen: menu, menuExpanded: menu ? 'true' : 'false',
+      headerRule: scrolled ? '#D9DEDF' : 'transparent',
+      navItems: NAV.map(([label, href, key]) => ({ label, href, current: r === key ? 'page' : undefined, fg: r === key ? '#14232E' : '#D5DADC', bg: r === key ? '#F5F4EF' : 'transparent', dot: r === key ? '#B69A62' : 'transparent' })),
+      formSpan: w >= 1100 ? 'span 2' : 'auto',
+      vacancyCount: previewVacancy ? '1 listing' : '0 open',
+      ...(PAGE_HEROS[isVacancy ? 'vacancy' : r] ? { hasPageHero: true, ...PAGE_HEROS[isVacancy ? 'vacancy' : r], pageTitle: r === 'terms' ? 'Terms of Use' : PAGE_HEROS[isVacancy ? 'vacancy' : r].pageTitle } : { hasPageHero: false }),
+      openMenu: this.openMenu, closeMenu: this.closeMenu, skipToMain: this.skipToMain,
+      menuBtnRef: this.menuBtnRef, closeBtnRef: this.closeBtnRef, mainRef: this.mainRef,
+      isHome: r === 'home', isServices: r === 'services', isIndustries: r === 'industries', isCompany: r === 'company',
+      isCareersList: r === 'careers' && !sub, isVacancy, vacancyOpen, vacancyClosed: isVacancy && !vacancyOpen,
+      isContact: r === 'contact', isLegal: r === 'privacy' || r === 'terms', isNotFound: r === '404',
+      legalTitle: r === 'terms' ? 'Terms of Use' : 'Privacy Policy',
+      showClosingCta: ['home', 'services', 'industries', 'careers'].includes(r) && !isVacancy,
+      strip: ['Professional security services', 'Commercial service enquiries', 'Consultation-led engagement'],
+      services, firstSummary: SERVICES[0].summary, otherServices: services.slice(1),
+      serviceOptions: pubs.filter(s => !s.draft),
+      steps: [
+        { n: '01', title: 'Share your requirements', body: 'Use the enquiry form or call us with a general outline of your organization, location, and the support you\u2019re considering.' },
+        { n: '02', title: 'Discuss your service needs', body: 'We talk through your premises or event and what you need from a security provider.' },
+        { n: '03', title: 'Review the next steps', body: 'Agree together on what happens next and what a service arrangement could involve.' }
+      ],
+      industries: INDUSTRIES.map((x, i) => ({ ...x, ratio: RATIOS[i], slot: 'ind-' + i, slotPrev: 'ind-prev-' + i, dir: i % 2 ? 'row-reverse' : 'row' })),
+      credentials: CREDENTIALS.map(label => ({ label })),
+      noVacancies: !previewVacancy, hasVacancies: previewVacancy,
+      careersTeaser: previewVacancy ? 'Approved vacancies are listed on the Careers page with details and an online application.' : 'There are no published vacancies at present. Approved openings will be listed on the Careers page.',
+      preService, hasPreService: !!preService,
+      enqSuccess: enq.status === 'success', enqShowForm: enq.status !== 'success',
+      ee: E.m.msg, eh: E.m.has, eb: E.m.border, ei: E.m.inv, enqErrList: E.errList,
+      enqSummaryShown: E.summaryShown, enqSummaryTitle: E.summaryTitle, enqSummaryBody: E.summaryBody, enqSummaryBodyShown: !!E.summaryBody,
+      enqBusy: E.busy, enqBtn: E.btn, enqBtnOpacity: E.busy ? 0.7 : 1, enqLive: E.live,
+      submitEnq: this.submitEnq, enqSummaryRef: this.enqSummaryRef, enqDoneRef: this.enqDoneRef,
+      appSuccess: app.status === 'success', appShowForm: app.status !== 'success',
+      ae: A.m.msg, ah: A.m.has, ab: A.m.border, ai: A.m.inv, appErrList: A.errList,
+      appSummaryShown: A.summaryShown, appSummaryTitle: A.summaryBody ? A.summaryTitle + ' ' + A.summaryBody : A.summaryTitle,
+      appBusy: A.busy, appBtn: A.btn, appBtnOpacity: A.busy ? 0.7 : 1, appLive: A.live,
+      submitApp: this.submitApp, appSummaryRef: this.appSummaryRef, appDoneRef: this.appDoneRef
+    };
+  }
+}
+</script>
+</body>
+</html>
